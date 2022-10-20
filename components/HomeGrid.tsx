@@ -1,32 +1,11 @@
-import {
-  Flex,
-  Heading,
-  Text,
-  Input,
-  Button,
-  SimpleGrid,
-  Link,
-  useColorModeValue,
-  Center,
-} from "@chakra-ui/react";
+import { Flex, Heading, Text, Input, Button, SimpleGrid, Link, useColorModeValue, Center } from "@chakra-ui/react";
 import { EmailIcon } from "@chakra-ui/icons";
-import {
-  SiGitbook,
-  SiGithub,
-  SiLinkedin,
-  SiTelegram,
-  SiTwitter,
-} from "react-icons/si";
+import { SiGitbook, SiGithub, SiLinkedin, SiTelegram, SiTwitter } from "react-icons/si";
 import NewsLetterSignUpForm from "./NewsLetterSignUpForm";
 
 export default function HomeGrid({ formBackground }: any) {
   return (
-    <Flex
-      direction={"column"}
-      justifyContent="center"
-      pl={[null, null, null, "100px"]}
-      mb={50}
-    >
+    <Flex direction={"column"} justifyContent="center" pl={[null, null, null, "100px"]} mb={50}>
       <SimpleGrid minChildWidth={360} spacingY={12}>
         <Flex
           justifyContent={"center"}
@@ -46,14 +25,7 @@ export default function HomeGrid({ formBackground }: any) {
           </Flex>
         </Flex>
 
-        <Flex
-          direction="column"
-          background={formBackground}
-          p={12}
-          rounded={6}
-          height={"300px"}
-          width={"300px"}
-        >
+        <Flex direction="column" background={formBackground} p={12} rounded={6} height={"300px"} width={"300px"}>
           <Heading mb={2}>Docs</Heading>
           <Text fontSize="sm" mb={6}>
             Read the Whitepaper / docs.
@@ -82,7 +54,7 @@ export default function HomeGrid({ formBackground }: any) {
           </Text>
           <Flex direction={"column"} height={"100%"} justifyContent={"center"}>
             <SimpleGrid columns={3} spacing={"3vh"}>
-              <Link href="https://twitter.com/0xMarkeljan" target="_blank">
+              <Link href="https://twitter.com/daoscape_" target="_blank">
                 <Button colorScheme="teal">
                   <SiTwitter size={20} />
                 </Button>
