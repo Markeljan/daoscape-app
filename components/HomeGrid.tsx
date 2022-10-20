@@ -1,9 +1,8 @@
-import { Flex, Heading, Text, Input, Button, SimpleGrid, Link, useColorModeValue, Center } from "@chakra-ui/react";
-import { EmailIcon } from "@chakra-ui/icons";
+import { Flex, Heading, Text, Button, SimpleGrid, Link } from "@chakra-ui/react";
 import { SiGitbook, SiGithub, SiLinkedin, SiTelegram, SiTwitter } from "react-icons/si";
 import NewsLetterSignUpForm from "./NewsLetterSignUpForm";
 
-export default function HomeGrid({ formBackground }: any) {
+export default function HomeGrid({ formBackground, containerBackground }: any) {
   return (
     <Flex direction={"column"} justifyContent="center" pl={[null, null, null, "100px"]} mb={50}>
       <SimpleGrid minChildWidth={360} spacingY={12}>

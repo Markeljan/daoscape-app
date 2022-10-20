@@ -20,7 +20,8 @@
     "**/*.ts",
     "**/*.tsx",
     "components/NewsLetterSignUpForm.js'",
-    "pages/api/NewsLetterSignUpForm.js"
+    "pages/api/NewsLetterSignUpForm.js",
+    "pages/_document.js"
   ],
   "exclude": ["node_modules"]
 }

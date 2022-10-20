@@ -1,12 +1,11 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { Flex, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Flex, useColorModeValue, useColorMode } from "@chakra-ui/react";
 import HomeGrid from "../components/HomeGrid";
 import ToggleTheme from "../components/ToggleTheme";
 
 const Home: NextPage = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
   const formBackground = useColorModeValue("gray.100", "gray.700");
 
   return (
@@ -23,7 +22,6 @@ const Home: NextPage = () => {
         </Flex>
 
         <HomeGrid formBackground={formBackground} />
-        <ToggleTheme colorMode={colorMode} toggleColorMode={toggleColorMode} />
       </Flex>
     </>
   );
