@@ -13,19 +13,20 @@ export default function MintPage() {
         <meta name="description" content="DAOScape Mint Page" />
         <link rel="icon" href="/2.png" />
       </Head>
-      {/* Nav */}
 
+      {/* Nav */}
       <Flex justifyContent="space-between" alignItems="center" m={2}>
         <a href="/">HOME PAGE</a>
         <ConnectButton />
       </Flex>
 
-      <Flex direction="column" justifyContent="center" alignItems="center" height="100vh">
+      <Flex direction="column" justifyContent="center" alignItems="center" height="80vh">
         <Flex padding={[50, 100, 150, 200, 250, 300]} background={formBackground}>
           <h1>Mint Page</h1>
         </Flex>
-        <ToggleTheme />
       </Flex>
+
+      <ToggleTheme />
     </>
   );
 }
