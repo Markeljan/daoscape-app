@@ -1,5 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { useColorModeValue } from "@chakra-ui/react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
 import ToggleTheme from "../components/ToggleTheme";
 
@@ -12,6 +13,13 @@ export default function MintPage() {
         <meta name="description" content="DAOScape Mint Page" />
         <link rel="icon" href="/2.png" />
       </Head>
+      {/* Nav */}
+
+      <Flex justifyContent="space-between" alignItems="center" m={2}>
+        <a href="/">HOME PAGE</a>
+        <ConnectButton />
+      </Flex>
+
       <Flex justifyContent="center" alignItems="center" height="100vh">
         <Flex padding={[50, 100, 150, 200, 250, 300]} background={formBackground}>
           <h1>Mint Page</h1>

@@ -30,22 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains} theme={null}>
-          <style
-            dangerouslySetInnerHTML={{
-              __html: `
-            :root {
-              ${cssStringFromTheme(lightTheme)}
-            }
-
-            html[data-dark] {
-              ${cssStringFromTheme(darkTheme, {
-                extends: lightTheme,
-              })}
-            }
-          `,
-            }}
-          />
+        <RainbowKitProvider chains={chains}>
           <Component {...pageProps} />
         </RainbowKitProvider>
       </WagmiConfig>

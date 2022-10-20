@@ -16,7 +16,9 @@ const Home: NextPage = () => {
         <meta name="description" content="DAOScape Homepage" />
         <link rel="icon" href="/swords.ico" />
       </Head>
-      <Flex justifyContent="right" alignItems="center" m={2}>
+      {/* Nav */}
+      <Flex justifyContent="space-between" alignItems="center" m={2}>
+        <a href="/mint">MINT PAGE</a>
         <ConnectButton />
       </Flex>
       <Flex direction="column" height="100vh" p={12}>
