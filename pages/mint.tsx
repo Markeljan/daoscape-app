@@ -20,7 +20,7 @@ export default function MintPage() {
         <ConnectButton />
       </Flex>
 
-      <Flex justifyContent="center" alignItems="center" height="100vh">
+      <Flex direction="column" justifyContent="center" alignItems="center" height="100vh">
         <Flex padding={[50, 100, 150, 200, 250, 300]} background={formBackground}>
           <h1>Mint Page</h1>
         </Flex>

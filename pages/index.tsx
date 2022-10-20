@@ -21,15 +21,19 @@ const Home: NextPage = () => {
         <a href="/mint">MINT PAGE</a>
         <ConnectButton />
       </Flex>
-      <Flex direction="column" height="100vh" p={12}>
+
+      <Flex direction="column" p={12}>
         <Flex mb={"80px"} justifyContent="center" gap={20}>
           <Image width={128} height={128} src="/nft-preview.gif"></Image>
           <Image src="/DAOScape.png" width="391px" height="141px" />
         </Flex>
-
-        <HomeGrid formBackground={formBackground} />
-        <ToggleTheme />
       </Flex>
+
+      <Flex direction={"column"} alignItems="center">
+        <HomeGrid formBackground={formBackground} />
+      </Flex>
+
+      <ToggleTheme />
     </>
   );
 };
