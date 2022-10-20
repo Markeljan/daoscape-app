@@ -16,6 +16,7 @@ const Home: NextPage = () => {
         <meta name="description" content="DAOScape Homepage" />
         <link rel="icon" href="/swords.ico" />
       </Head>
+      <p>Deeploy Test</p>
       <Flex direction="column" height="100vh" p={12}>
         <Flex mb={"80px"} justifyContent="center" gap={20}>
           <Image width={128} height={128} src="/nft-preview.gif"></Image>
