@@ -21,3 +21,5 @@ export default function MintPage() {
     </>
   );
 }
+
+//Yes you can. Pass any signer to new Key with import { Key } from 'harmony-marketplace-sdk'
