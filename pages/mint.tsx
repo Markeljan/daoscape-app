@@ -2,6 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import { useColorModeValue } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
+import Link from "next/link";
 import ToggleTheme from "../components/ToggleTheme";
 
 export default function MintPage() {
@@ -16,7 +17,7 @@ export default function MintPage() {
 
       {/* Nav */}
       <Flex justifyContent="space-between" alignItems="center" m={2}>
-        <a href="/">HOME PAGE</a>
+        <Link href="/">HOME PAGE</Link>
         <ConnectButton />
       </Flex>
 

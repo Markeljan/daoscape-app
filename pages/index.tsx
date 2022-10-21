@@ -5,6 +5,7 @@ import { Flex, useColorModeValue } from "@chakra-ui/react";
 import HomeGrid from "../components/HomeGrid";
 import ToggleTheme from "../components/ToggleTheme";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   const formBackground = useColorModeValue("gray.100", "gray.700");
@@ -19,7 +20,7 @@ const Home: NextPage = () => {
 
       {/* Nav */}
       <Flex justifyContent="space-between" alignItems="center" m={2}>
-        <a href="/mint">MINT PAGE</a>
+        <Link href="/mint">MINT PAGE</Link>
         <ConnectButton />
       </Flex>
 
