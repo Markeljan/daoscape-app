@@ -9,8 +9,12 @@ export default function GatedPage() {
   return (
     <>
       <Navbar />
-      <Flex direction="column" justifyContent="center" alignItems="center" height="80vh">
-        <Flex padding={[50, 100, 150, 200, 250, 300]} background={formBackground}>
+      <Flex direction="column" justifyContent="center" alignItems="center" mt={10}>
+        <Flex
+          padding={["15vw", "15vw", "20vw", "20vw", "25vw", "25vw"]}
+          background={formBackground}
+          borderRadius="2xl"
+        >
           <Text fontSize="5xl">Gated Content</Text>
         </Flex>
       </Flex>
