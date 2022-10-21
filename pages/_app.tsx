@@ -33,7 +33,7 @@ function ThirdwebProvider({ wagmiClient, children }: any) {
       authConfig={{
         authUrl: "/api/auth",
         domain: "daoscape.one",
-        loginRedirect: "/login",
+        loginRedirect: "/gated",
       }}
     >
       {children}

@@ -1601,7 +1601,7 @@
     scrypt-shim "github:web3-js/scrypt-shim"
     uuid "^3.3.2"
 
-"@harmony-js/network@0.1.56":
+"@harmony-js/network@0.1.56", "@harmony-js/network@^0.1.56":
   version "0.1.56"
   resolved "https://registry.yarnpkg.com/@harmony-js/network/-/network-0.1.56.tgz#86d08923d5963fb8ad15cb3beb85de045afd9969"
   integrity sha512-ItwgvQPjcFyVKKa1mFAqRMno6yyp1cjM2UNIdHOHtWG+H8BgObcw2ZM4LJpAPVF/XSoaTcZZwfB2hD7zOFnnYQ==

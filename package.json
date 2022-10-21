@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^2.3.5",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@harmony-js/network": "^0.1.56",
     "@harmony-js/utils": "^0.1.56",
     "@rainbow-me/rainbowkit": "^0.7.2",
     "@thirdweb-dev/auth": "^2.0.20",

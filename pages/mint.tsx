@@ -1,10 +1,38 @@
-import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
+import { Button, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import Head from "next/head";
 import ToggleTheme from "../components/ToggleTheme";
 import Navbar from "../components/Navbar";
+import { HRC721, PrivateKey } from "harmony-marketplace-sdk";
+import { HttpProvider } from "@harmony-js/network";
+import { DAOSCAPE_ABI } from "../src/constants";
+import { ChainID, Unit } from "@harmony-js/utils";
+import { useAddress } from "@thirdweb-dev/react";
+import { Key } from "harmony-marketplace-sdk";
 
 export default function MintPage() {
   const formBackground = useColorModeValue("gray.100", "gray.700");
+  const address = useAddress() as string;
+
+  const PRIVATE_KEY = "3c90a1577ed63b0beb17f27490a66c0713953269ebb0f625fb546a61676dc5d8";
+  // const PRIVATE_KEY = "45e497bd45a9049bcb649016594489ac67b9f052a6cdf5cb74ee2427a60bf25e";
+  const wallet = new PrivateKey(new HttpProvider("https://api.s0.b.hmny.io"), PRIVATE_KEY);
+
+  const contract = new HRC721("0x4F8224c93226Bd5A62DD640b511f1cE0b537f69d", DAOSCAPE_ABI, wallet, {
+    defaultGas: "21000",
+    defaultGasPrice: "1",
+  });
+
+  const DEFAULT_GAS = {
+    gasPrice: new Unit("30").asGwei().toWei(),
+    gasLimit: "3500000",
+  };
+  async function mintNFT() {
+    let userNFTBalance = await contract.balanceOf(address, DEFAULT_GAS);
+    console.log(userNFTBalance.toString());
+    const txReceipt = await contract.safeMint(address, "2", DEFAULT_GAS);
+    console.log(txReceipt);
+  }
+
   return (
     <>
       <Head>
@@ -20,8 +48,11 @@ export default function MintPage() {
           padding={["15vw", "15vw", "20vw", "20vw", "25vw", "25vw"]}
           background={formBackground}
           borderRadius="2xl"
+          direction={"column"}
+          gap={10}
         >
           <Text fontSize="5xl">Mint Page</Text>
+          <Button onClick={() => mintNFT()}>Mint Scaper</Button>
         </Flex>
       </Flex>
 
@@ -29,5 +60,3 @@ export default function MintPage() {
     </>
   );
 }
-
-//Yes you can. Pass any signer to new Key with import { Key } from 'harmony-marketplace-sdk'
