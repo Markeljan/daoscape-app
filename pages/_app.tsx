@@ -6,6 +6,8 @@ import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { defaultChains } from "../src/chains";
+import { SessionProvider } from "next-auth/react";
+import { Session } from "next-auth";
 
 //rainbowkit + wagmi
 const { chains, provider } = configureChains(defaultChains, [publicProvider()]);
@@ -20,12 +22,14 @@ const wagmiClient = createClient({
   provider,
 });
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
     <ChakraProvider theme={theme}>
       <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains} showRecentTransactions={true}>
-          <Component {...pageProps} />
+        <RainbowKitProvider chains={chains} showRecentTransactions={true} coolMode>
+          <SessionProvider session={pageProps.session} refetchInterval={0}>
+            <Component {...pageProps} />
+          </SessionProvider>
         </RainbowKitProvider>
       </WagmiConfig>
     </ChakraProvider>

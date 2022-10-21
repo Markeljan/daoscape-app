@@ -1,9 +1,8 @@
 import { Flex } from "@chakra-ui/react";
 import { useColorModeValue } from "@chakra-ui/react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
-import Link from "next/link";
 import ToggleTheme from "../components/ToggleTheme";
+import Navbar from "../components/Navbar";
 
 export default function MintPage() {
   const formBackground = useColorModeValue("gray.100", "gray.700");
@@ -15,11 +14,7 @@ export default function MintPage() {
         <link rel="icon" href="/2.png" />
       </Head>
 
-      {/* Nav */}
-      <Flex justifyContent="space-between" alignItems="center" m={2}>
-        <Link href="/">HOME PAGE</Link>
-        <ConnectButton />
-      </Flex>
+      <Navbar />
 
       <Flex direction="column" justifyContent="center" alignItems="center" height="80vh">
         <Flex padding={[50, 100, 150, 200, 250, 300]} background={formBackground}>
