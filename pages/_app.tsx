@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains}>
+        <RainbowKitProvider chains={chains} showRecentTransactions={true}>
           <Component {...pageProps} />
         </RainbowKitProvider>
       </WagmiConfig>

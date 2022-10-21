@@ -5,13 +5,34 @@ import Link from "next/link";
 import { Flex, useColorModeValue } from "@chakra-ui/react";
 import HomeGrid from "../components/HomeGrid";
 import ToggleTheme from "../components/ToggleTheme";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton, useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 
 const Home: NextPage = () => {
   const formBackground = useColorModeValue("gray.100", "gray.700");
+  const addRecentTransaction = useAddRecentTransaction();
 
   return (
     <>
+      <button
+        onClick={() => {
+          addRecentTransaction({
+            hash: "0x0d9e03b0ff69ffea90c0b0094c5fe58aa52480c5e84b86812a38b997879b24da",
+            description: "Call",
+          });
+        }}
+      >
+        Add recent transaction2
+      </button>
+      <button
+        onClick={() => {
+          addRecentTransaction({
+            hash: "0x0d9e03b0ff69ffea90c0b0094c5fe58aa52480c5e84b86812a38b997873224da",
+            description: "Mint",
+          });
+        }}
+      >
+        Add recent transaction
+      </button>
       <Head>
         <title>DAOScape</title>
         <meta name="description" content="DAOScape Homepage" />

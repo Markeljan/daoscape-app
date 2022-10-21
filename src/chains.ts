@@ -11,7 +11,7 @@ export const harmonyTestnet: Chain = {
   blockExplorers: {
     default: {
       name: "explorer.pops",
-      url: "https://explorer.pops.one/",
+      url: "https://explorer.pops.one",
     },
   },
   testnet: true,
