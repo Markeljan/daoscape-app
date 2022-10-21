@@ -6,8 +6,12 @@ import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { defaultChains } from "../src/chains";
-import { RainbowKitSiweNextAuthProvider } from "@rainbow-me/rainbowkit-siwe-next-auth";
+import {
+  RainbowKitSiweNextAuthProvider,
+  GetSiweMessageOptions,
+} from "@rainbow-me/rainbowkit-siwe-next-auth";
 import { SessionProvider } from "next-auth/react";
+import { Session } from "next-auth";
 
 //rainbowkit + wagmi
 const { chains, provider } = configureChains(defaultChains, [publicProvider()]);
@@ -22,12 +26,21 @@ const wagmiClient = createClient({
   provider,
 });
 
-function MyApp({ Component, pageProps }: AppProps) {
+const getSiweMessageOptions: GetSiweMessageOptions = () => ({
+  statement: "Sign in to my RainbowKit app",
+});
+
+function MyApp({
+  Component,
+  pageProps,
+}: AppProps<{
+  session: Session;
+}>) {
   return (
     <ChakraProvider theme={theme}>
       <WagmiConfig client={wagmiClient}>
         <SessionProvider refetchInterval={0} session={pageProps.session}>
-          <RainbowKitSiweNextAuthProvider>
+          <RainbowKitSiweNextAuthProvider getSiweMessageOptions={getSiweMessageOptions}>
             <RainbowKitProvider chains={chains}>
               <Component {...pageProps} />
             </RainbowKitProvider>
