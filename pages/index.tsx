@@ -1,16 +1,14 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
-import { Button, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Flex, useColorModeValue } from "@chakra-ui/react";
 import HomeGrid from "../components/HomeGrid";
 import ToggleTheme from "../components/ToggleTheme";
-import { ConnectButton, useAddRecentTransaction } from "@rainbow-me/rainbowkit";
+import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
 
 const Home: NextPage = () => {
-  const { push } = useRouter();
   const formBackground = useColorModeValue("gray.100", "gray.700");
   const addRecentTransaction = useAddRecentTransaction();
 
@@ -24,8 +22,8 @@ const Home: NextPage = () => {
 
       <Navbar />
 
-      <Flex direction="column" p={12}>
-        <Flex mb={"80px"} justifyContent="center" gap={20}>
+      <Flex direction="column" m={10}>
+        <Flex justifyContent="center" gap={20}>
           <Image width={128} height={128} src="/nft-preview.gif"></Image>
           <Image src="/DAOScape.png" width="391px" height="141px" />
         </Flex>

@@ -22,3 +22,22 @@ export default function GatedPage() {
     </>
   );
 }
+
+export async function getServerSideProps(context: any) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/mint",
+        permanent: false,
+      },
+    };
+  }
+
+  // check for NFT ownership
+
+  return {
+    props: { session },
+  };
+}
