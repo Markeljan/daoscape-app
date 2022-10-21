@@ -1,5 +1,4 @@
-import { Flex } from "@chakra-ui/react";
-import { useColorModeValue } from "@chakra-ui/react";
+import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import Head from "next/head";
 import ToggleTheme from "../components/ToggleTheme";
 import Navbar from "../components/Navbar";
@@ -18,7 +17,7 @@ export default function MintPage() {
 
       <Flex direction="column" justifyContent="center" alignItems="center" height="80vh">
         <Flex padding={[50, 100, 150, 200, 250, 300]} background={formBackground}>
-          <h1>Mint Page</h1>
+          <Text fontSize="5xl">Mint Page</Text>
         </Flex>
       </Flex>
 
