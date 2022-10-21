@@ -61,7 +61,6 @@ export async function getServerSideProps(context: any) {
   //   };
   // }
 
-  const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY, "https://api.s0.b.hmny.io");
   const hasNft = true;
 
   // Finally, return the props
