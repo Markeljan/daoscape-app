@@ -14,7 +14,7 @@ export default function Navbar() {
       p="22px"
       m={2}
     >
-      <Flex gap={["5px", "5px", "10px", "10px", "20px", "20px"]}>
+      <Flex gap={["5px", "10px", "20px", "20px", "20px", "20px"]}>
         <Button onClick={() => push("/")}>Home</Button>
         <Button onClick={() => push("/mint")}>Mint</Button>
         <Button onClick={() => push("/gated")}>Gated</Button>

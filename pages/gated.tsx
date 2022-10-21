@@ -1,7 +1,9 @@
-import { Button, Flex, Text, useColorModeValue } from "@chakra-ui/react";
-import { getSession } from "next-auth/react";
+import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import ToggleTheme from "../components/ToggleTheme";
+import { getUser } from "../auth.config";
+import { HRC721, HRC20, HarmonyShards, PrivateKey } from "harmony-marketplace-sdk";
+import { ABI } from "../src/constants";
 
 export default function GatedPage() {
   const formBackground = useColorModeValue("gray.100", "gray.700");
@@ -24,9 +26,9 @@ export default function GatedPage() {
 }
 
 export async function getServerSideProps(context: any) {
-  const session = await getSession(context);
+  const user = await getUser(context.req);
 
-  if (!session) {
+  if (!user) {
     return {
       redirect: {
         destination: "/mint",
@@ -35,9 +37,30 @@ export async function getServerSideProps(context: any) {
     };
   }
 
-  // check for NFT ownership
+  //ensure we are able to generate an auth token using our pk instantiated SDK
+  const PRIVATE_KEY = process.env.THIRDWEB_AUTH_PRIVATE_KEY;
+  if (!PRIVATE_KEY) {
+    throw new Error("No PRIVATE_KEY environment variable found.");
+  }
+  const wallet = new PrivateKey(HarmonyShards.SHARD_0, PRIVATE_KEY);
+  const contract = new HRC20("0x35305d505a884ccfaba7b7d5f533ef29ad57254b", ABI, wallet);
 
+  const totalSuply = await contract.totalSupply();
+  const hasNft = true;
+
+  console.log(totalSuply);
+
+  console.log("User", user.address, "doesn't have an NFT! Redirecting...");
+  if (!hasNft) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  // Finally, return the props
   return {
-    props: { session },
+    props: {},
   };
 }

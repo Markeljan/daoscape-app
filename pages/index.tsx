@@ -5,7 +5,6 @@ import { Flex, useColorModeValue } from "@chakra-ui/react";
 import HomeGrid from "../components/HomeGrid";
 import ToggleTheme from "../components/ToggleTheme";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
-import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
 
 const Home: NextPage = () => {

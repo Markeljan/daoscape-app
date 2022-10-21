@@ -21,7 +21,9 @@
     "**/*.tsx",
     "components/NewsLetterSignUpForm.js'",
     "pages/api/NewsLetterSignUpForm.js",
-    "pages/_document.js"
+    "pages/_document.js",
+    "pages/api/auth/[...nextauth].js",
+    "pages/user.js"
   ],
   "exclude": ["node_modules"]
 }
