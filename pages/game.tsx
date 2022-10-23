@@ -83,7 +83,7 @@ export default function GatedPage() {
     return NFTsArray.map((nft) => {
       console.log("nft0", nft);
       return (
-        <Flex direction="column" align="center" justify="center">
+        <Flex key={nft.id} direction="column" align="center" justify="center">
           <Image src={nft.uri} />
           <Text>{"id: " + nft.id}</Text>
           <Text>
