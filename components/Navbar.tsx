@@ -1,4 +1,4 @@
-import { Button, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Button, Flex, useColorModeValue, Image } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useUser, useLogin, useLogout, useAddress } from "@thirdweb-dev/react";
 import Router from "next/router";
@@ -26,6 +26,7 @@ export default function Navbar() {
         <Button onClick={() => push("/mint")}>Mint</Button>
         <Button onClick={() => login()}>Game</Button>
       </Flex>
+      <Image src="/DAOScape.png" width={{ sm: "0px", md: "200px", lg: "300px" }} />
       <ConnectButton />
     </Flex>
   );

@@ -120,7 +120,7 @@ export default function GatedPage() {
             Welcome to DAOScape!
           </Text>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
-            {NFTsArray && renderAllNFTs()}
+            {/* {NFTsArray && renderAllNFTs()} */}
           </SimpleGrid>
         </Flex>
       </Flex>
