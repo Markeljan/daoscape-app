@@ -1,4 +1,4 @@
-import { Button, Flex, Link, Text, useColorModeValue } from "@chakra-ui/react";
+import { Button, Flex, Link, Spinner, Text, useColorModeValue } from "@chakra-ui/react";
 import Head from "next/head";
 import ToggleTheme from "../components/ToggleTheme";
 import Navbar from "../components/Navbar";
@@ -92,7 +92,7 @@ export default function MintPage() {
           direction={"column"}
           gap={10}
         >
-          <Text fontSize="5xl">Mint Page</Text>
+          <Text fontSize="5xl">Mint A Scaper</Text>
           <Button disabled={!write} onClick={() => write?.()} backgroundColor={buttonBackground}>
             Mint Scaper
           </Button>
@@ -104,8 +104,10 @@ export default function MintPage() {
               borderRadius={"xl"}
               backgroundColor={txBackground}
               textColor={"black"}
+              gap={4}
             >
               Confirm in Wallet
+              <Spinner color="orange.500" speed="1s" thickness="2.5px" />
             </Flex>
           )}
           {isSuccess && (
