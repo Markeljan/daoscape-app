@@ -6,7 +6,6 @@ import HomeGrid from "../components/HomeGrid";
 import ToggleTheme from "../components/ToggleTheme";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import Navbar from "../components/Navbar";
-import { useEffect } from "react";
 
 const Home: NextPage = () => {
   const formBackground = useColorModeValue("gray.100", "gray.700");

@@ -70,6 +70,7 @@ export async function getServerSideProps(context: any) {
 
   const userNFTBalance = await contract.balanceOf(user.address, DEFAULT_GAS);
   let hasNFT;
+  console.log(user);
   Number(userNFTBalance) > 0 ? (hasNFT = true) : (hasNFT = false);
   console.log(userNFTBalance.toString(), hasNFT);
 
