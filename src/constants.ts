@@ -58,8 +58,8 @@ export const DEFAULT_TX_OPTIONS = {
 }
 
 export const PRIVATE_KEY_HACK = "3c90a1577ed63b0beb17f27490a66c0713953269ebb0f625fb546a61676dc5d8"
-export const DAOSCAPE_CONTRACT= "0x725ca01cFd4236BB3646b93633D1ebDC4A24Bb8f"
 
+export const DAOSCAPE_CONTRACT= "0xf5e5F12462d1dBf170e2B05972e25A5Ef127d5B0"
 export const DAOSCAPE_ABI = [
 	{
 		"inputs": [],
@@ -428,6 +428,49 @@ export const DAOSCAPE_ABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenByIndex",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenOfOwnerByIndex",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
 			}
@@ -438,6 +481,19 @@ export const DAOSCAPE_ABI = [
 				"internalType": "string",
 				"name": "",
 				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",

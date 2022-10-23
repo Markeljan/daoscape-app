@@ -29,6 +29,7 @@ export default function MintPage() {
     overrides: {
       from: address,
       value: ethers.utils.parseEther("1"),
+      gasPrice: 600000000000,
     },
   } as UseContractConfig);
   const { data, isLoading, isSuccess, write } = useContractWrite(config);
