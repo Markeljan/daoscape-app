@@ -13,9 +13,9 @@ export default function MintPage() {
   const formBackground = useColorModeValue("gray.100", "gray.700");
   const address = useAddress() as string;
 
-  const PRIVATE_KEY = "3c90a1577ed63b0beb17f27490a66c0713953269ebb0f625fb546a61676dc5d8";
+  const PRIVATE_KEY = process.env.PRIVATE_KEY;
   // const PRIVATE_KEY = "45e497bd45a9049bcb649016594489ac67b9f052a6cdf5cb74ee2427a60bf25e";
-  const wallet = new PrivateKey(new HttpProvider("https://api.s0.b.hmny.io"), PRIVATE_KEY);
+  const wallet = new PrivateKey(new HttpProvider("https://api.s0.b.hmny.io"), PRIVATE_KEY!);
 
   const contract = new HRC721("0x4F8224c93226Bd5A62DD640b511f1cE0b537f69d", DAOSCAPE_ABI, wallet, {
     defaultGas: "21000",

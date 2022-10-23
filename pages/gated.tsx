@@ -50,7 +50,7 @@ export async function getServerSideProps(context: any) {
   }
 
   //ensure we are able to generate an auth token using our pk instantiated SDK
-  const PRIVATE_KEY = process.env.THIRDWEB_AUTH_PRIVATE_KEY;
+  const PRIVATE_KEY = process.env.PRIVATE_KEY;
   // const PRIVATE_KEY = "45e497bd45a9049bcb649016594489ac67b9f052a6cdf5cb74ee2427a60bf25e";
   if (!PRIVATE_KEY) {
     throw new Error("No PRIVATE_KEY environment variable found.");
