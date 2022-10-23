@@ -4,14 +4,15 @@ import ToggleTheme from "../components/ToggleTheme";
 import Navbar from "../components/Navbar";
 import { HRC721, PrivateKey } from "harmony-marketplace-sdk";
 import { HttpProvider } from "@harmony-js/network";
-import { DAOSCAPE_ABI } from "../src/constants";
+import { DAOSCAPE_ABI, DAOSCAPE_CONTRACT } from "../src/constants";
 import { ChainID, Unit } from "@harmony-js/utils";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import { useAccount, useContractWrite, useFeeData, usePrepareContractWrite } from "wagmi";
-import NextLink from "next/link";
 import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 import { useEffect } from "react";
 import { isExternal } from "util/types";
+import Image from "next/image";
+import { ethers } from "ethers";
 
 export default function MintPage() {
   const addRecentTransaction = useAddRecentTransaction();
@@ -20,11 +21,15 @@ export default function MintPage() {
   const txBackground = "white";
   const { address } = useAccount();
   const { config } = usePrepareContractWrite({
-    address: "0x59552fB54b327D0f2785EC498eF0e02A2A294Efe",
+    address: DAOSCAPE_CONTRACT,
     chainId: 0x6357d2e0,
     abi: DAOSCAPE_ABI,
     functionName: "safeMint",
     args: [address, "599"],
+    overrides: {
+      from: address,
+      value: ethers.utils.parseEther("1"),
+    },
   } as UseContractConfig);
   const { data, isLoading, isSuccess, write } = useContractWrite(config);
 
@@ -33,7 +38,7 @@ export default function MintPage() {
       data &&
         addRecentTransaction({
           hash: data.hash,
-          description: "Mint Scaper",
+          description: "Mint DAOScaper",
         });
     }
   }, [data]);
@@ -47,7 +52,7 @@ export default function MintPage() {
     ChainID.HmyTestnet
   );
 
-  const contract = new HRC721("0x59552fB54b327D0f2785EC498eF0e02A2A294Efe", DAOSCAPE_ABI, wallet, {
+  const contract = new HRC721(DAOSCAPE_CONTRACT, DAOSCAPE_ABI, wallet, {
     defaultGas: "21000",
     defaultGasPrice: "1",
   });
@@ -86,15 +91,20 @@ export default function MintPage() {
 
       <Flex direction="column" justifyContent="center" alignItems="center" mt={10}>
         <Flex
-          padding={["15vw", "15vw", "20vw", "20vw", "25vw", "25vw"]}
+          p={["10vw"]}
+          pt={["5vw"]}
+          pb={["5vw"]}
           background={formBackground}
           borderRadius="2xl"
           direction={"column"}
           gap={10}
         >
-          <Text fontSize="5xl">Mint A Scaper</Text>
+          <Flex direction="column" justifyContent="center" alignItems="center" gap={10}>
+            <Text fontSize="5xl">Mint DAOScaper</Text>
+            <Image src="/nft-preview.gif" alt="DAOScapers" width="300px" height="300px" />
+          </Flex>
           <Button disabled={!write} onClick={() => write?.()} backgroundColor={buttonBackground}>
-            Mint Scaper
+            Mint 1 ONE
           </Button>
           {isLoading && (
             <Flex

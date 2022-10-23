@@ -24,15 +24,7 @@ export default function Navbar() {
       <Flex gap={["5px", "10px", "20px", "20px", "20px", "20px"]}>
         <Button onClick={() => push("/")}>Home</Button>
         <Button onClick={() => push("/mint")}>Mint</Button>
-        {!user ? (
-          <>
-            <Button onClick={() => login()}>Play Game</Button>
-          </>
-        ) : (
-          <>
-            <Button onClick={() => logout()}>Logout</Button>
-          </>
-        )}
+        <Button onClick={() => login()}>Game</Button>
       </Flex>
       <ConnectButton />
     </Flex>

@@ -4,12 +4,10 @@ import Image from "next/image";
 import { Flex, useColorModeValue } from "@chakra-ui/react";
 import HomeGrid from "../components/HomeGrid";
 import ToggleTheme from "../components/ToggleTheme";
-import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import Navbar from "../components/Navbar";
 
 const Home: NextPage = () => {
   const formBackground = useColorModeValue("gray.100", "gray.700");
-  const addRecentTransaction = useAddRecentTransaction();
 
   return (
     <>
