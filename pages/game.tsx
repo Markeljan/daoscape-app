@@ -86,8 +86,13 @@ export default function GatedPage() {
         <Flex direction="column" align="center" justify="center">
           <Image src={nft.uri} />
           <Text>{"id: " + nft.id}</Text>
-          <Text>{"Owner: " + nft.owner.substring(0, 20)}</Text>
-          <Text align={"center"}>
+          <Text>
+            {"Owner: "}
+            <Link href={"https://explorer.pops.one/address/" + nft.owner} isExternal>
+              {nft.owner.substring(0, 20)}
+            </Link>
+          </Text>
+          <Text>
             {"URI: "}
             <Link href={nft.uri} isExternal>
               {nft.uri.substring(0, 20)}{" "}
