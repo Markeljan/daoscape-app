@@ -13,7 +13,7 @@ Built with NextJS, Harmony Marketplace SDK, WAGMI, and Chakra UI!
  
 Demo website is live at (https://daoscape.one)
  
-Docs live at (https://deocs.daoscape.one)
+Docs live at (https://docs.daoscape.one)
 
 Demo and presentation: (https://youtu.be/ZySkbtsLL4M)
 
