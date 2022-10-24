@@ -59,8 +59,8 @@ export const DEFAULT_TX_OPTIONS = {
 
 export const PRIVATE_KEY_HACK = "3c90a1577ed63b0beb17f27490a66c0713953269ebb0f625fb546a61676dc5d8"
 
-export const DAOSCAPE_CONTRACT = "0xc86bCEe9CFa23cDe3D11D3333A164C119a9556f2"
-export const DSGOLD_CONTRACT = "0x10Dd3617d7815F93FA3B9b85b5EA1FD01f98F0D7"
+export const DAOSCAPE_CONTRACT = "0x82354c748bFfFe5Fb6B98F0c174315Bfba911eeb"
+export const DSGOLD_CONTRACT = "0x06EaF5FBdcF508F37b2264Cf99c540A11e4449b4"
 export const DAOSCAPE_ABI = [
 	{
 		"inputs": [
@@ -168,13 +168,7 @@ export const DAOSCAPE_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_tokenId",
-				"type": "uint256"
-			}
-		],
+		"inputs": [],
 		"name": "endQuest",
 		"outputs": [],
 		"stateMutability": "nonpayable",

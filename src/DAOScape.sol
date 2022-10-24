@@ -64,6 +64,7 @@ contract DAOScape is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
         public addressToTimelockToTokenId;
 
     function beginQuest(uint256 _tokenId) public {
+        require(balanceOf(msg.sender) >= 1, "Can't Quest with your last NFT");
         safeTransferFrom(msg.sender, address(this), _tokenId);
         addressToTimelockToTokenId[msg.sender][_tokenId] = block.timestamp + 60;
     }
@@ -74,14 +75,14 @@ contract DAOScape is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
         return reward;
     }
 
-    function endQuest(uint256 _tokenId) public {
+    function endQuest() public {
         uint256 tokenId = 0;
         for (uint256 i = 1; i <= totalSupply(); i++) {
             if (addressToTimelockToTokenId[msg.sender][i] > 0) tokenId = i;
         }
         require(tokenId != 0, "You dont have anyone questing.");
         require(
-            block.timestamp >= addressToTimelockToTokenId[msg.sender][_tokenId],
+            block.timestamp >= addressToTimelockToTokenId[msg.sender][tokenId],
             "Quest still active!"
         );
         //clear timestamp
@@ -89,8 +90,8 @@ contract DAOScape is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
         //send random ERC20 DSGOLD reward
         IERC20(DSGold).transfer(msg.sender, randomQuestReward());
         //send ERC721 DSCAPER
-        this.approve(msg.sender, _tokenId);
-        this.safeTransferFrom(address(this), msg.sender, _tokenId);
+        this.approve(msg.sender, tokenId);
+        this.safeTransferFrom(address(this), msg.sender, tokenId);
     }
 
     function getTimeStamp() public view returns (uint256) {

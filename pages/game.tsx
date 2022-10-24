@@ -20,6 +20,7 @@ import {
 } from "react-icons/bs";
 import Sound from "react-sound";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
+import Head from "next/head";
 
 const PRIVATE_KEY = PRIVATE_KEY_HACK;
 
@@ -68,30 +69,38 @@ export default function GatedPage() {
   const [showTavern, setShowTavern] = useState(false);
   const [showQuests, setShowQuests] = useState(false);
   const [filterNFTs, setFilterNFTs] = useState(false);
-  const [functionName, setFunctionName] = useState("");
   const [muted, setMuted] = useState(false);
 
   const addRecentTransaction = useAddRecentTransaction();
 
-  const { config } = usePrepareContractWrite({
+  const { config: beginQuestConfig } = usePrepareContractWrite({
     address: DAOSCAPE_CONTRACT,
     chainId: 0x6357d2e0,
     abi: DAOSCAPE_ABI,
-    functionName: functionName,
+    functionName: "beginQuest",
     args: [selectedNFT?.id],
     overrides: {
       gasPrice: 600000000000,
     },
   } as UseContractConfig);
-  const { data, isLoading, isSuccess, write } = useContractWrite(config);
+  const {
+    data: beginQuestData,
+    isLoading,
+    isSuccess,
+    write: beginQuest,
+  } = useContractWrite(beginQuestConfig);
 
-  useEffect(() => {
-    data &&
-      addRecentTransaction({
-        hash: data.hash,
-        description: functionName,
-      });
-  }, [data]);
+  const { config: endQuestConfig } = usePrepareContractWrite({
+    address: DAOSCAPE_CONTRACT,
+    chainId: 0x6357d2e0,
+    abi: DAOSCAPE_ABI,
+    functionName: "endQuest",
+    args: [],
+    overrides: {
+      gasPrice: 600000000000,
+    },
+  } as UseContractConfig);
+  const { data: endQuestData, write: endQuest } = useContractWrite(endQuestConfig);
 
   useEffect(() => {
     isDisconnected && logout();
@@ -237,6 +246,11 @@ export default function GatedPage() {
 
   return (
     <>
+      <Head>
+        <title>DAOScape Game</title>
+        <meta name="description" content="DAOScape Game" />
+        <link rel="icon" href="/swords.ico" />
+      </Head>
       <Navbar />
       <Flex direction="column" justifyContent="center" alignItems="center" mt={10}>
         <Flex
@@ -415,10 +429,8 @@ export default function GatedPage() {
               spacing={10}
               background={formBackground}
             >
-              <Button onClick={() => (setFunctionName("beginQuest"), write?.())}>
-                Start Quest
-              </Button>
-              <Button onClick={() => (setFunctionName("endQuest"), write?.())}>End Quest</Button>
+              <Button onClick={() => beginQuest?.()}>Start Quest</Button>
+              <Button onClick={() => endQuest?.()}>End Quest</Button>
             </SimpleGrid>
           </Flex>
         </Flex>
@@ -434,7 +446,7 @@ export default function GatedPage() {
           {muted ? <BsVolumeMuteFill size={30} /> : <BsFillVolumeUpFill size={30} />}
         </Button>
       </Flex>
-      <Sound url="/osrs.mp3" playStatus="PLAYING" volume={muted ? 0 : 40} />
+      <Sound url="/osrs.mp3" playStatus="PLAYING" volume={muted ? 0 : 10} />
     </>
   );
 }
