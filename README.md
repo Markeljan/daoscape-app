@@ -1,3 +1,30 @@
+DAOScape is a play to earn community RPG/MMO on the Harmony network.  Built for the Encode x Harmony Hackathon 2022.
+
+
+The DAO and players will have a majority of the influence on the development of the game.  
+
+What differentiates DAOScape form other web3 games is that it is LIVE and playable.  
+
+The features are in alpha and limited, but the idea of DAOScape is to ship ship ship!
+
+FEATURING: HRC721, HRC20, Harmony Onchain VRF, and NFT Token Gating with NextAuth.
+Built with NextJS, Harmony Marketplace SDK, WAGMI, and Chakra UI!  
+
+ 
+Demo website is live at (https://daoscape.one)
+ 
+Docs live at (https://deocs.daoscape.one)
+
+Demo and presentation: (https://youtu.be/ZySkbtsLL4M)
+
+
+ Demo video
+ Opensource (MIT / BSD) github
+ Github documentation describing the use of SDK to integrate the above
+
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
