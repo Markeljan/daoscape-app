@@ -13,14 +13,10 @@ import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/u
 import {
   BsArrowLeft,
   BsArrowRight,
-  BsFillVolumeMuteFill,
   BsFillVolumeUpFill,
   BsToggleOff,
   BsToggleOn,
-  BsVolumeMute,
   BsVolumeMuteFill,
-  BsVolumeOff,
-  BsVolumeUp,
 } from "react-icons/bs";
 import Sound from "react-sound";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
@@ -72,6 +68,7 @@ export default function GatedPage() {
   const [showTavern, setShowTavern] = useState(false);
   const [showQuests, setShowQuests] = useState(false);
   const [filterNFTs, setFilterNFTs] = useState(false);
+  const [functionName, setFunctionName] = useState("");
   const [muted, setMuted] = useState(false);
 
   const addRecentTransaction = useAddRecentTransaction();
@@ -80,7 +77,7 @@ export default function GatedPage() {
     address: DAOSCAPE_CONTRACT,
     chainId: 0x6357d2e0,
     abi: DAOSCAPE_ABI,
-    functionName: "beginQuest",
+    functionName: functionName,
     args: [selectedNFT?.id],
     overrides: {
       gasPrice: 600000000000,
@@ -92,7 +89,7 @@ export default function GatedPage() {
     data &&
       addRecentTransaction({
         hash: data.hash,
-        description: "Quest Started",
+        description: functionName,
       });
   }, [data]);
 
@@ -115,7 +112,7 @@ export default function GatedPage() {
     let nftOwner;
     let nftURI;
     async function getNFTsArray() {
-      for (let i = 1; i < totalSupply; i++) {
+      for (let i = 1; i <= totalSupply; i++) {
         nftOwner = await contract.ownerOf(i, DEFAULT_GAS);
         nftURI = await contract.tokenURI(i, DEFAULT_GAS);
         tempNFTArray.push({ id: i, owner: nftOwner, uri: nftURI });
@@ -418,8 +415,10 @@ export default function GatedPage() {
               spacing={10}
               background={formBackground}
             >
-              <Button onClick={() => write?.()}>Start Quest</Button>
-              <Button>End Quest</Button>
+              <Button onClick={() => (setFunctionName("beginQuest"), write?.())}>
+                Start Quest
+              </Button>
+              <Button onClick={() => (setFunctionName("endQuest"), write?.())}>End Quest</Button>
             </SimpleGrid>
           </Flex>
         </Flex>

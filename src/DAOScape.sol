@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
@@ -14,8 +15,12 @@ contract DAOScape is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("DAOScapers", "SCAPER") {
+    address DSGold;
+
+    constructor(address _DSGold) ERC721("DAOScapers", "DSCAPER") {
         _tokenIdCounter.increment();
+
+        DSGold = _DSGold;
     }
 
     function _baseURI() internal pure override returns (string memory) {
@@ -23,6 +28,9 @@ contract DAOScape is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
             "https://bafybeihfvy2hmcnvpax6anx3tgx53qie4nj32eqtuehsu2g5c5hx3ukxc4.ipfs.nftstorage.link/";
     }
 
+    ////////////////////////////////////////////////////
+    /////////////////////MINTING////////////////////////
+    ////////////////////////////////////////////////////
     function safeMint(address to, string memory uri) public payable {
         require(msg.value == 1 ether, "Need to pay 1 ONE");
         uint256 tokenId = _tokenIdCounter.current();
@@ -47,6 +55,68 @@ contract DAOScape is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
             }
             result := mload(memPtr)
         }
+    }
+
+    ////////////////////////////////////////////////////
+    ////////////////////GAME LOGIC//////////////////////
+    ////////////////////////////////////////////////////
+    mapping(address => mapping(uint256 => uint256))
+        public addressToTimelockToTokenId;
+
+    function beginQuest(uint256 _tokenId) public {
+        safeTransferFrom(msg.sender, address(this), _tokenId);
+        addressToTimelockToTokenId[msg.sender][_tokenId] = block.timestamp + 60;
+    }
+
+    function randomQuestReward() public view returns (uint256) {
+        //add logic based on stats
+        uint256 reward = (uint256(harmonyVRF()) % 10) + 1;
+        return reward;
+    }
+
+    function endQuest(uint256 _tokenId) public {
+        uint256 tokenId = 0;
+        for (uint256 i = 1; i <= totalSupply(); i++) {
+            if (addressToTimelockToTokenId[msg.sender][i] > 0) tokenId = i;
+        }
+        require(tokenId != 0, "You dont have anyone questing.");
+        require(
+            block.timestamp >= addressToTimelockToTokenId[msg.sender][_tokenId],
+            "Quest still active!"
+        );
+        //clear timestamp
+        addressToTimelockToTokenId[msg.sender][tokenId] = 0;
+        //send random ERC20 DSGOLD reward
+        IERC20(DSGold).transfer(msg.sender, randomQuestReward());
+        //send ERC721 DSCAPER
+        this.approve(msg.sender, _tokenId);
+        this.safeTransferFrom(address(this), msg.sender, _tokenId);
+    }
+
+    function getTimeStamp() public view returns (uint256) {
+        return block.timestamp;
+    }
+
+    /////////////////////////////////////////////////////
+    ////////////////////TREASURY/////////////////////////
+    ////////////////////////////////////////////////////
+    function getBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+
+    function withdrawAllTokens() public onlyOwner {
+        payable(msg.sender).transfer(getBalance());
+    }
+
+    function deposit(uint _amount) public payable {
+        // Set the minimum amount to 1 token
+        uint _minAmount = 1 * (10**18);
+        require(_amount >= _minAmount, "Amount less than minimum amount");
+        IERC20(DSGold).transferFrom(msg.sender, address(this), _amount);
+    }
+
+    function getDSGoldBalance() public view onlyOwner returns (uint) {
+        return IERC20(DSGold).balanceOf(address(this));
     }
 
     // The following functions are overrides required by Solidity.
@@ -84,11 +154,12 @@ contract DAOScape is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
         return super.tokenURI(tokenId);
     }
 
-    function getBalance() public view returns (uint) {
-        return address(this).balance;
-    }
-
-    function withdrawAllTokens() public onlyOwner {
-        payable(msg.sender).transfer(getBalance());
+    function onERC721Received(
+        address,
+        address,
+        uint256,
+        bytes calldata
+    ) external pure returns (bytes4) {
+        return IERC721Receiver.onERC721Received.selector;
     }
 }

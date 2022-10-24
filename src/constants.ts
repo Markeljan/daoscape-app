@@ -59,8 +59,8 @@ export const DEFAULT_TX_OPTIONS = {
 
 export const PRIVATE_KEY_HACK = "3c90a1577ed63b0beb17f27490a66c0713953269ebb0f625fb546a61676dc5d8"
 
-export const DAOSCAPE_CONTRACT = "0x21d491dBEC9C32Aa56B251F419897E55015861B8"
-export const DSGOLD_CONTRACT = "0xb10a730BAB4A46f280e0D55881A8b7201e1F7378"
+export const DAOSCAPE_CONTRACT = "0xc86bCEe9CFa23cDe3D11D3333A164C119a9556f2"
+export const DSGOLD_CONTRACT = "0x10Dd3617d7815F93FA3B9b85b5EA1FD01f98F0D7"
 export const DAOSCAPE_ABI = [
 	{
 		"inputs": [
@@ -359,25 +359,6 @@ export const DAOSCAPE_ABI = [
 		"name": "withdrawAllTokens",
 		"outputs": [],
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "addressToQuestingTokenId",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
