@@ -71,7 +71,8 @@ contract DAOScape is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
 
     function randomQuestReward() public view returns (uint256) {
         //add logic based on stats
-        uint256 reward = (uint256(harmonyVRF()) % 10) + 1;
+        uint256 reward = ((uint256(harmonyVRF()) % 10) + 1) *
+            1000000000000000000;
         return reward;
     }
 
