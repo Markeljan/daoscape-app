@@ -27,17 +27,6 @@ const Home: NextPage = () => {
       </Flex>
 
       <ToggleTheme />
-
-      {/* <button
-        onClick={() => {
-          addRecentTransaction({
-            hash: "0x0d9e03b0ff69ffea90c0b0094c5fe58aa52480c5e84b86812a38b997879b24da",
-            description: "Call",
-          });
-        }}
-      >
-        Add recent transaction2
-      </button> */}
     </>
   );
 };

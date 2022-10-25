@@ -1,14 +1,12 @@
 import { Button, Flex, Image, Link, SimpleGrid, Text, useColorModeValue } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import ToggleTheme from "../components/ToggleTheme";
-import { getUser } from "../auth.config";
 import { HRC721, PrivateKey } from "harmony-marketplace-sdk";
 import { DAOSCAPE_ABI, DAOSCAPE_CONTRACT, PRIVATE_KEY_HACK } from "../src/constants";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 import { HttpProvider } from "@harmony-js/network";
 import { ChainID, Unit } from "@harmony-js/utils";
 import { useEffect, useState } from "react";
-import { useLogout } from "@thirdweb-dev/react";
 import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 import {
   BsArrowLeft,
@@ -56,8 +54,6 @@ export default function GatedPage() {
   const buttonBackground = useColorModeValue("blue.200", "blue.600");
   const buttonHoverBackground = useColorModeValue("blue.300", "blue.700");
   const buttonActiveBackground = useColorModeValue("blue.400", "blue.800");
-  const { isDisconnected } = useAccount();
-  const logout = useLogout();
   const { address } = useAccount();
   const [totalSupply, setTotalSupply] = useState(0);
   const [NFTsArray, setNFTsArray] = useState([] as NFT[]);
@@ -101,10 +97,6 @@ export default function GatedPage() {
     },
   } as UseContractConfig);
   const { data: endQuestData, write: endQuest } = useContractWrite(endQuestConfig);
-
-  useEffect(() => {
-    isDisconnected && logout();
-  }, [isDisconnected]);
 
   //fetch NFT contract and user NFT data on mount
   useEffect(() => {
@@ -452,36 +444,36 @@ export default function GatedPage() {
 }
 
 //checks for NFT in user wallet.
-export async function getServerSideProps(context: any) {
-  if (!PRIVATE_KEY) {
-    throw new Error("No PRIVATE_KEY environment variable found.");
-  }
-  const user = await getUser(context.req);
+// export async function getServerSideProps(context: any) {
+//   if (!PRIVATE_KEY) {
+//     throw new Error("No PRIVATE_KEY environment variable found.");
+//   }
+//   const user = await getUser(context.req);
 
-  if (!user) {
-    return {
-      redirect: {
-        destination: "/mint",
-        permanent: false,
-      },
-    };
-  }
+//   if (!user) {
+//     return {
+//       redirect: {
+//         destination: "/mint",
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  const userNFTBalance = await contract.balanceOf(user.address, DEFAULT_GAS);
-  let hasNFT;
-  Number(userNFTBalance) > 0 ? (hasNFT = true) : (hasNFT = false);
+//   const userNFTBalance = await contract.balanceOf(user.address, DEFAULT_GAS);
+//   let hasNFT;
+//   Number(userNFTBalance) > 0 ? (hasNFT = true) : (hasNFT = false);
 
-  if (!hasNFT) {
-    return {
-      redirect: {
-        destination: "/mint",
-        permanent: false,
-      },
-    };
-  }
+//   if (!hasNFT) {
+//     return {
+//       redirect: {
+//         destination: "/mint",
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  // Finally, return the props
-  return {
-    props: {},
-  };
-}
+//   // Finally, return the props
+//   return {
+//     props: {},
+//   };
+// }

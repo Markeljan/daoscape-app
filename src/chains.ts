@@ -17,4 +17,21 @@ export const harmonyTestnet: Chain = {
   testnet: true,
 };
 
-export const defaultChains: Chain[] = [harmonyTestnet];
+export const trustEVMTestnet : Chain = {
+  id: 15555,
+  name: "TrustEVM Testnet",
+  network: "trustevm-testnet",
+  nativeCurrency: { name: "EVM", symbol: "EVM", decimals: 18 },
+  rpcUrls: {
+    default: "https://api.testnet-dev.trust.one",
+  },
+  blockExplorers: {
+    default: {
+      name: "trustscan",
+      url: "https://trustscan.one",
+    },
+  },
+  testnet: true,
+};
+
+export const defaultChains: Chain[] = [harmonyTestnet, trustEVMTestnet];
