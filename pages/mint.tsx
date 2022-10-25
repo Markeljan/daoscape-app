@@ -2,15 +2,11 @@ import { Button, Flex, Link, Spinner, Text, useColorModeValue } from "@chakra-ui
 import Head from "next/head";
 import ToggleTheme from "../components/ToggleTheme";
 import Navbar from "../components/Navbar";
-import { HRC721, PrivateKey } from "harmony-marketplace-sdk";
-import { HttpProvider } from "@harmony-js/network";
 import { DAOSCAPE_ABI, DAOSCAPE_CONTRACT } from "../src/constants";
-import { ChainID, Unit } from "@harmony-js/utils";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import { useAccount, useContractWrite, useFeeData, usePrepareContractWrite } from "wagmi";
 import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 import { useEffect } from "react";
-import { isExternal } from "util/types";
 import Image from "next/image";
 import { ethers } from "ethers";
 
@@ -43,42 +39,6 @@ export default function MintPage() {
         });
     }
   }, [data]);
-
-  // const PRIVATE_KEY = process.env.PRIVATE_KEY;
-  const PRIVATE_KEY = "3c90a1577ed63b0beb17f27490a66c0713953269ebb0f625fb546a61676dc5d8";
-  // const PRIVATE_KEY = "45e497bd45a9049bcb649016594489ac67b9f052a6cdf5cb74ee2427a60bf25e";
-  const wallet = new PrivateKey(
-    new HttpProvider("https://api.s0.b.hmny.io"),
-    PRIVATE_KEY,
-    ChainID.HmyTestnet
-  );
-
-  const contract = new HRC721(DAOSCAPE_CONTRACT, DAOSCAPE_ABI, wallet, {
-    defaultGas: "21000",
-    defaultGasPrice: "1",
-  });
-
-  const DEFAULT_GAS = {
-    gasPrice: new Unit("30").asGwei().toWei(),
-    gasLimit: "3500000",
-  };
-
-  const MED_GAS = {
-    gasPrice: new Unit("300").asGwei().toWei(),
-    gasLimit: "3500000",
-  };
-
-  async function mintNFT() {
-    //*** harmonysdk mint  ***//
-    // let userNFTBalance = await contract.balanceOf(address as string, DEFAULT_GAS);
-    // console.log(userNFTBalance.toString());
-    // const txReceipt = await contract.safeMint(address as string, "598", MED_GAS);
-    // addRecentTransaction({
-    //   hash: txReceipt.receipt!.transactionHash,
-    //   description: "Mint",
-    // });
-    // console.log(txReceipt);
-  }
 
   return (
     <>

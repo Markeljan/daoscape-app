@@ -1,11 +1,8 @@
 import { Button, Flex, Image, Link, SimpleGrid, Text, useColorModeValue } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import ToggleTheme from "../components/ToggleTheme";
-import { HRC721, PrivateKey } from "harmony-marketplace-sdk";
 import { DAOSCAPE_ABI, DAOSCAPE_CONTRACT, PRIVATE_KEY_HACK } from "../src/constants";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
-import { HttpProvider } from "@harmony-js/network";
-import { ChainID, Unit } from "@harmony-js/utils";
 import { useEffect, useState } from "react";
 import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 import {
@@ -19,29 +16,6 @@ import {
 import Sound from "react-sound";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
-
-const PRIVATE_KEY = PRIVATE_KEY_HACK;
-
-const wallet = new PrivateKey(
-  new HttpProvider("https://api.s0.b.hmny.io"),
-  PRIVATE_KEY,
-  ChainID.HmyTestnet
-);
-
-const DEFAULT_GAS = {
-  gasPrice: new Unit("30").asGwei().toWei(),
-  gasLimit: "3500000",
-};
-
-const MED_GAS = {
-  gasPrice: new Unit("300").asGwei().toWei(),
-  gasLimit: "3500000",
-};
-
-const contract = new HRC721(DAOSCAPE_CONTRACT, DAOSCAPE_ABI, wallet, {
-  defaultGas: "21000",
-  defaultGasPrice: "1",
-});
 
 interface NFT {
   id: number;
