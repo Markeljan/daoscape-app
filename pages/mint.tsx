@@ -4,7 +4,7 @@ import ToggleTheme from "../components/ToggleTheme";
 import Navbar from "../components/Navbar";
 import { DAOSCAPE_ABI, DAOSCAPE_CONTRACT } from "../src/constants";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
-import { useAccount, useContractWrite, useFeeData, usePrepareContractWrite } from "wagmi";
+import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
 import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 import { useEffect } from "react";
 import Image from "next/image";
@@ -16,9 +16,11 @@ export default function MintPage() {
   const buttonBackground = useColorModeValue("gray.200", "gray.600");
   const txBackground = "white";
   const { address } = useAccount();
+  const { chain } = useNetwork();
+
   const { config } = usePrepareContractWrite({
     address: DAOSCAPE_CONTRACT,
-    chainId: 0x6357d2e0,
+    chainId: chain?.id,
     abi: DAOSCAPE_ABI,
     functionName: "safeMint",
     args: [address, "599"],

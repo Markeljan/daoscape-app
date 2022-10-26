@@ -17,7 +17,7 @@ export const harmonyTestnet: Chain = {
   testnet: true,
 };
 
-export const trustEVMTestnet : Chain = {
+export const trustEVMTestnet: Chain = {
   id: 15555,
   name: "TrustEVM Testnet",
   network: "trustevm-testnet",

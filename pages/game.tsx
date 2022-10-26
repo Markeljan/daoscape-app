@@ -1,8 +1,14 @@
 import { Button, Flex, Image, Link, SimpleGrid, Text, useColorModeValue } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import ToggleTheme from "../components/ToggleTheme";
-import { DAOSCAPE_ABI, DAOSCAPE_CONTRACT, PRIVATE_KEY_HACK } from "../src/constants";
-import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
+import { DAOSCAPE_ABI, HARMONY_ADDRESSES, TRUSTEVM_ADDRESSES } from "../src/constants";
+import {
+  useAccount,
+  useContractRead,
+  useContractWrite,
+  useNetwork,
+  usePrepareContractWrite,
+} from "wagmi";
 import { useEffect, useState } from "react";
 import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 import {
@@ -29,6 +35,7 @@ export default function GatedPage() {
   const buttonHoverBackground = useColorModeValue("blue.300", "blue.700");
   const buttonActiveBackground = useColorModeValue("blue.400", "blue.800");
   const { address } = useAccount();
+  const { chain } = useNetwork();
   const [totalSupply, setTotalSupply] = useState(0);
   const [NFTsArray, setNFTsArray] = useState([] as NFT[]);
   const [userNFTsArray, setUserNFTsArray] = useState([] as NFT[]);
@@ -44,8 +51,8 @@ export default function GatedPage() {
   const addRecentTransaction = useAddRecentTransaction();
 
   const { config: beginQuestConfig } = usePrepareContractWrite({
-    address: DAOSCAPE_CONTRACT,
-    chainId: 0x6357d2e0,
+    address: chain?.id === 1666700000 ? HARMONY_ADDRESSES.DAOSCAPE : TRUSTEVM_ADDRESSES.DAOSCAPE,
+    chainId: chain?.id,
     abi: DAOSCAPE_ABI,
     functionName: "beginQuest",
     args: [selectedNFT?.id],
@@ -59,10 +66,11 @@ export default function GatedPage() {
     isSuccess,
     write: beginQuest,
   } = useContractWrite(beginQuestConfig);
+  console.log(chain);
 
   const { config: endQuestConfig } = usePrepareContractWrite({
-    address: DAOSCAPE_CONTRACT,
-    chainId: 0x6357d2e0,
+    address: chain?.id === 1666700000 ? HARMONY_ADDRESSES.DAOSCAPE : TRUSTEVM_ADDRESSES.DAOSCAPE,
+    chainId: chain?.id,
     abi: DAOSCAPE_ABI,
     functionName: "endQuest",
     args: [],
@@ -71,6 +79,9 @@ export default function GatedPage() {
     },
   } as UseContractConfig);
   const { data: endQuestData, write: endQuest } = useContractWrite(endQuestConfig);
+
+  // const { data, isError, isLoading} = useContractRead({
+  //   address: DAOSCAPE_CONTRACT,
 
   //fetch NFT contract and user NFT data on mount
   useEffect(() => {
