@@ -1,4 +1,4 @@
-export const DAOSCAPE_ABI = [
+const DAOSCAPE_ABI = [
 	{
 		"inputs": [
 			{
@@ -630,7 +630,7 @@ export const DAOSCAPE_ABI = [
 		"type": "function"
 	}
 ]
-export const DSGOLD_ABI = [
+const DSGOLD_ABI = [
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -1290,11 +1290,21 @@ export const DSGOLD_ABI = [
 	}
 ]
 
-export const HARMONY_ADDRESSES = {
-	DAOSCAPE: '0xF338b278954C4d39536E186532182d68F4A8CfCB',
-	DSGOLD: "0xe2f03ab2806ac4d0c0222911a4e9b96771fb71d8",
+export const DAOSCAPE = {
+	HarmonyTestnet: "0xF338b278954C4d39536E186532182d68F4A8CfCB",
+	1666700000: "0xF338b278954C4d39536E186532182d68F4A8CfCB",
+	TrustEvmTestnet: "0x9c429C7bEED44A9eb242cC0B69A2e5e1ADaC5DAF",
+	15555: "0x9c429C7bEED44A9eb242cC0B69A2e5e1ADaC5DAF",
+	
+	abi: DAOSCAPE_ABI,
 }
-export const TRUSTEVM_ADDRESSES = {
-	DAOSCAPE: "0x9c429C7bEED44A9eb242cC0B69A2e5e1ADaC5DAF",
-	DSGOLD: "0x6C3C27Bbe1fa369bc52214d5783d727E36fbBA9F",
+
+export const DSGOLD = {
+	HarmonyTestnet: "0xe2f03ab2806ac4d0c0222911a4e9b96771fb71d8",
+	1666700000: "0xe2f03ab2806ac4d0c0222911a4e9b96771fb71d8",
+	TrustEvmTestnet: "0x6C3C27Bbe1fa369bc52214d5783d727E36fbBA9F",
+	15555: "0x6C3C27Bbe1fa369bc52214d5783d727E36fbBA9F",
+
+	abi: DSGOLD_ABI,
+
 }

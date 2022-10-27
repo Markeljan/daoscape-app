@@ -2,7 +2,7 @@ import { Button, Flex, Link, Spinner, Text, useColorModeValue } from "@chakra-ui
 import Head from "next/head";
 import ToggleTheme from "../components/ToggleTheme";
 import Navbar from "../components/Navbar";
-import { DAOSCAPE_ABI, DAOSCAPE_CONTRACT } from "../src/constants";
+import { DAOSCAPE_ABI, DAOSCAPE_CONTRACT } from "../src/contracts";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
 import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";

@@ -1,7 +1,7 @@
 import { Button, Flex, Image, Link, SimpleGrid, Text, useColorModeValue } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import ToggleTheme from "../components/ToggleTheme";
-import { DAOSCAPE_ABI, HARMONY_ADDRESSES, TRUSTEVM_ADDRESSES } from "../src/constants";
+import { DAOSCAPE_ABI, HARMONY, TRUSTEVM } from "../src/contracts";
 import {
   useAccount,
   useContractRead,
@@ -51,7 +51,7 @@ export default function GatedPage() {
   const addRecentTransaction = useAddRecentTransaction();
 
   const { config: beginQuestConfig } = usePrepareContractWrite({
-    address: chain?.id === 1666700000 ? HARMONY_ADDRESSES.DAOSCAPE : TRUSTEVM_ADDRESSES.DAOSCAPE,
+    address: chain?.id === 1666700000 ? HARMONY.DAOSCAPE : TRUSTEVM.DAOSCAPE,
     chainId: chain?.id,
     abi: DAOSCAPE_ABI,
     functionName: "beginQuest",
@@ -60,6 +60,7 @@ export default function GatedPage() {
       gasPrice: 600000000000,
     },
   } as UseContractConfig);
+
   const {
     data: beginQuestData,
     isLoading,
