@@ -3,7 +3,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../src/theme";
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, useSigner, WagmiConfig } from "wagmi";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { defaultChains } from "../src/chains";
 

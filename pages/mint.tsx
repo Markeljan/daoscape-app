@@ -2,13 +2,13 @@ import { Button, Flex, Link, Spinner, Text, useColorModeValue } from "@chakra-ui
 import Head from "next/head";
 import ToggleTheme from "../components/ToggleTheme";
 import Navbar from "../components/Navbar";
-import { DAOSCAPE_ABI, DAOSCAPE_CONTRACT } from "../src/contracts";
+import { DAOSCAPE_DATA } from "../src/contracts";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
-import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 import { useEffect } from "react";
 import Image from "next/image";
 import { ethers } from "ethers";
+import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 
 export default function MintPage() {
   const addRecentTransaction = useAddRecentTransaction();
@@ -17,11 +17,13 @@ export default function MintPage() {
   const txBackground = "white";
   const { address } = useAccount();
   const { chain } = useNetwork();
+  const DAOScape: UseContractConfig = {
+    address: DAOSCAPE_DATA[chain?.id as keyof typeof DAOSCAPE_DATA] as string,
+    abi: DAOSCAPE_DATA.abi as [],
+  };
 
-  const { config } = usePrepareContractWrite({
-    address: DAOSCAPE_CONTRACT,
-    chainId: chain?.id,
-    abi: DAOSCAPE_ABI,
+  const { config: safeMint } = usePrepareContractWrite({
+    ...DAOScape,
     functionName: "safeMint",
     args: [address, "599"],
     overrides: {
@@ -30,7 +32,8 @@ export default function MintPage() {
       gasPrice: 600000000000,
     },
   } as UseContractConfig);
-  const { data, isLoading, isSuccess, write } = useContractWrite(config);
+
+  const { data, isLoading, isSuccess, write } = useContractWrite(safeMint);
 
   useEffect(() => {
     if (isSuccess) {
@@ -67,7 +70,7 @@ export default function MintPage() {
             <Image src="/nft-preview.gif" alt="DAOScapers" width="300px" height="300px" />
           </Flex>
           <Button disabled={!write} onClick={() => write?.()} backgroundColor={buttonBackground}>
-            Mint 1 ONE
+            Mint 1
           </Button>
           {isLoading && (
             <Flex

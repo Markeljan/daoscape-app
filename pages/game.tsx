@@ -1,16 +1,17 @@
 import { Button, Flex, Image, Link, SimpleGrid, Text, useColorModeValue } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import ToggleTheme from "../components/ToggleTheme";
-import { DAOSCAPE_ABI, HARMONY, TRUSTEVM } from "../src/contracts";
+import { DAOSCAPE_DATA } from "../src/contracts";
 import {
   useAccount,
   useContractRead,
   useContractWrite,
   useNetwork,
   usePrepareContractWrite,
+  useContract,
+  useProvider,
 } from "wagmi";
 import { useEffect, useState } from "react";
-import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 import {
   BsArrowLeft,
   BsArrowRight,
@@ -22,6 +23,8 @@ import {
 import Sound from "react-sound";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
+import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
+import { Contract, ContractInterface, ethers } from "ethers";
 
 interface NFT {
   id: number;
@@ -36,7 +39,7 @@ export default function GatedPage() {
   const buttonActiveBackground = useColorModeValue("blue.400", "blue.800");
   const { address } = useAccount();
   const { chain } = useNetwork();
-  const [totalSupply, setTotalSupply] = useState(0);
+  const provider = useProvider();
   const [NFTsArray, setNFTsArray] = useState([] as NFT[]);
   const [userNFTsArray, setUserNFTsArray] = useState([] as NFT[]);
   const [selectedNFT, setSelectedNFT] = useState<NFT>();
@@ -47,90 +50,87 @@ export default function GatedPage() {
   const [showQuests, setShowQuests] = useState(false);
   const [filterNFTs, setFilterNFTs] = useState(false);
   const [muted, setMuted] = useState(false);
+  const DAOSCAPE = useContract({
+    address: DAOSCAPE_DATA[chain?.id as keyof typeof DAOSCAPE_DATA] as string,
+    abi: DAOSCAPE_DATA.abi as [],
+  });
+  const [gameContract, setGameContract] = useState<Contract>();
 
   const addRecentTransaction = useAddRecentTransaction();
 
   const { config: beginQuestConfig } = usePrepareContractWrite({
-    address: chain?.id === 1666700000 ? HARMONY.DAOSCAPE : TRUSTEVM.DAOSCAPE,
-    chainId: chain?.id,
-    abi: DAOSCAPE_ABI,
+    ...DAOSCAPE,
     functionName: "beginQuest",
     args: [selectedNFT?.id],
     overrides: {
       gasPrice: 600000000000,
     },
+    enabled: false,
   } as UseContractConfig);
-
-  const {
-    data: beginQuestData,
-    isLoading,
-    isSuccess,
-    write: beginQuest,
-  } = useContractWrite(beginQuestConfig);
-  console.log(chain);
+  const { data: beginQuestData, write: beginQuest } = useContractWrite(beginQuestConfig);
 
   const { config: endQuestConfig } = usePrepareContractWrite({
-    address: chain?.id === 1666700000 ? HARMONY_ADDRESSES.DAOSCAPE : TRUSTEVM_ADDRESSES.DAOSCAPE,
-    chainId: chain?.id,
-    abi: DAOSCAPE_ABI,
+    ...DAOSCAPE,
     functionName: "endQuest",
     args: [],
     overrides: {
       gasPrice: 600000000000,
     },
+    enabled: false,
   } as UseContractConfig);
   const { data: endQuestData, write: endQuest } = useContractWrite(endQuestConfig);
 
-  // const { data, isError, isLoading} = useContractRead({
-  //   address: DAOSCAPE_CONTRACT,
+  const { data: totalSupplyData } = useContractRead({
+    ...DAOSCAPE,
+    functionName: "totalSupply",
+  });
 
-  //fetch NFT contract and user NFT data on mount
+  const { data: userNFTBalance } = useContractRead({
+    ...DAOSCAPE,
+    functionName: "balanceOf",
+    args: [address],
+  });
+
   useEffect(() => {
-    async function getTotalSupply() {
-      setTotalSupply(Number(await contract.totalSupply(DEFAULT_GAS)));
-      const userNFTCount = Number(await contract.balanceOf(address!, DEFAULT_GAS));
-    }
-    address && getTotalSupply();
-  }, []);
+    setGameContract(new ethers.Contract(DAOSCAPE!.address, DAOSCAPE_DATA.abi, provider));
+  }, [DAOSCAPE]);
 
-  //update NFTsArray after knowing total supply
   useEffect(() => {
     let tempNFTArray = [] as NFT[];
+    let tempUserNFTArray = [] as NFT[];
     let nftOwner;
     let nftURI;
     async function getNFTsArray() {
-      for (let i = 1; i <= totalSupply; i++) {
-        nftOwner = await contract.ownerOf(i, DEFAULT_GAS);
-        nftURI = await contract.tokenURI(i, DEFAULT_GAS);
+      for (let i = 1; i <= Number(totalSupplyData); i++) {
+        nftOwner = await gameContract?.ownerOf(i);
+        nftURI = await gameContract?.tokenURI(i);
+        //add user NFTS to array
         tempNFTArray.push({ id: i, owner: nftOwner, uri: nftURI });
-      }
-      setNFTsArray(tempNFTArray);
-    }
-    totalSupply >= 1 && getNFTsArray();
-  }, [totalSupply]);
-
-  useEffect(() => {
-    if (NFTsArray) {
-      let tempUserNFTArray = [] as NFT[];
-      NFTsArray.forEach((nft) => {
-        if (nft.owner === address?.toLocaleLowerCase()) {
-          tempUserNFTArray.push(nft);
+        if (nftOwner === address?.toLocaleLowerCase()) {
+          tempUserNFTArray.push({ id: i, owner: nftOwner, uri: nftURI });
         }
-      });
-      setUserNFTsArray(tempUserNFTArray);
-
+      }
+      //set NFT data and render NFT elements
+      setNFTsArray(tempNFTArray);
       setNFTEls(renderAllNFTs() as any);
+      setUserNFTsArray(tempUserNFTArray);
       setUserNFTEls(renderUserNFTs() as any);
+
       setSelectedNFT(NFTsArray.find((nft) => nft.owner === address!.toLocaleLowerCase()) as NFT);
     }
-  }, [NFTsArray]);
+    gameContract && getNFTsArray();
+  }, [gameContract]);
 
   useEffect(() => {
     selectedNFT && setSelectedNFTEl(renderSelectedNFTEl() as any);
   }, [selectedNFT]);
 
   function renderAllNFTs() {
+    if (NFTsArray.length < 1) {
+      return;
+    }
     return NFTsArray.map((nft) => {
+      console.log(nft);
       return (
         <Flex key={nft.id} direction="column" align="center" justify="center">
           <Image src={nft.uri} />
@@ -138,7 +138,7 @@ export default function GatedPage() {
           <Text>
             {"Owner: "}
             <Link href={"https://explorer.pops.one/address/" + nft.owner} isExternal>
-              {nft.owner.substring(0, 20)}
+              {nft.owner?.substring(0, 20)}
             </Link>
           </Text>
           <Text>
@@ -424,11 +424,14 @@ export default function GatedPage() {
           {muted ? <BsVolumeMuteFill size={30} /> : <BsFillVolumeUpFill size={30} />}
         </Button>
       </Flex>
-      <Sound url="/osrs.mp3" playStatus="PLAYING" volume={muted ? 0 : 10} />
+      <Sound url="/osrs.mp3" playStatus={muted ? "PLAYING" : "PAUSED"} volume={muted ? 0 : 10} />
     </>
   );
 }
 
+function useDebounce(tokenId: string, arg1: number) {
+  throw new Error("Function not implemented.");
+}
 //checks for NFT in user wallet.
 // export async function getServerSideProps(context: any) {
 //   if (!PRIVATE_KEY) {

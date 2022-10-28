@@ -1290,7 +1290,9 @@ const DSGOLD_ABI = [
 	}
 ]
 
-export const DAOSCAPE = {
+export type Contract = { address: string; abi: any; chainId: number };
+
+export const DAOSCAPE_DATA = {
 	HarmonyTestnet: "0xF338b278954C4d39536E186532182d68F4A8CfCB",
 	1666700000: "0xF338b278954C4d39536E186532182d68F4A8CfCB",
 	TrustEvmTestnet: "0x9c429C7bEED44A9eb242cC0B69A2e5e1ADaC5DAF",
@@ -1299,7 +1301,7 @@ export const DAOSCAPE = {
 	abi: DAOSCAPE_ABI,
 }
 
-export const DSGOLD = {
+export const DSGOLD_DATA = {
 	HarmonyTestnet: "0xe2f03ab2806ac4d0c0222911a4e9b96771fb71d8",
 	1666700000: "0xe2f03ab2806ac4d0c0222911a4e9b96771fb71d8",
 	TrustEvmTestnet: "0x6C3C27Bbe1fa369bc52214d5783d727E36fbBA9F",
