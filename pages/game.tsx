@@ -24,7 +24,6 @@ import Sound from "react-sound";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
 import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
-import { Contract, ethers } from "ethers";
 
 interface NFT {
   id: number;
@@ -92,12 +91,6 @@ export default function GatedPage() {
   });
 
   useEffect(() => {
-    (async () => {
-      console.log("totalSupply", Number(totalSupplyData));
-    })();
-  }, [DAOSCAPE]);
-
-  useEffect(() => {
     let tempNFTArray = [] as NFT[];
     let tempUserNFTArray = [] as NFT[];
     let nftOwner;
@@ -139,7 +132,7 @@ export default function GatedPage() {
           <Text>{"id: " + nft.id}</Text>
           <Text>
             {"Owner: "}
-            <Link href={"https://explorer.pops.one/address/" + nft.owner} isExternal>
+            <Link href={chain?.blockExplorers?.default.url + "/address/" + nft.owner} isExternal>
               {nft.owner?.substring(0, 20)}
             </Link>
           </Text>
@@ -159,14 +152,14 @@ export default function GatedPage() {
       return;
     }
     return NFTsArray.map((nft) => {
-      if (nft.owner === address!.toLocaleLowerCase())
+      if (nft.owner === address)
         return (
           <Flex key={nft.id} direction="column" align="center" justify="center">
             <Image src={nft.uri} />
             <Text>{"id: " + nft.id}</Text>
             <Text>
               {"Owner: "}
-              <Link href={"https://explorer.pops.one/address/" + nft.owner} isExternal>
+              <Link href={chain?.blockExplorers?.default.url + "/address/" + nft.owner} isExternal>
                 {nft.owner.substring(0, 20)}
               </Link>
             </Text>
@@ -191,7 +184,10 @@ export default function GatedPage() {
         <Text>{"Token id: " + selectedNFT!.id}</Text>
         <Text>
           {"Owner: "}
-          <Link href={"https://explorer.pops.one/address/" + selectedNFT!.owner} isExternal>
+          <Link
+            href={chain?.blockExplorers?.default.url + "/address/" + selectedNFT!.owner}
+            isExternal
+          >
             {selectedNFT!.owner.substring(0, 5) + "..." + selectedNFT!.owner.substring(39, 42)}
           </Link>
         </Text>
