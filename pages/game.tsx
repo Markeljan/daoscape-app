@@ -1,6 +1,6 @@
 import { Button, Flex, Image, Link, SimpleGrid, Text, useColorModeValue } from "@chakra-ui/react";
-import Navbar from "../components/Navbar";
-import ToggleTheme from "../components/ToggleTheme";
+import Navbar from "../src/components/Navbar";
+import ToggleTheme from "../src/components/ToggleTheme";
 import { DAOSCAPE_DATA } from "../src/contracts";
 import {
   useAccount,
@@ -10,8 +10,9 @@ import {
   usePrepareContractWrite,
   useContract,
   useProvider,
+  useSigner,
 } from "wagmi";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   BsArrowLeft,
   BsArrowRight,
@@ -25,6 +26,9 @@ import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
 import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 
+import { ContractContext } from "../src/contexts/ContractContext";
+import QuestHall from "../src/components/QuestHall";
+
 interface NFT {
   id: number;
   owner: string;
@@ -36,9 +40,7 @@ export default function GatedPage() {
   const buttonBackground = useColorModeValue("blue.200", "blue.600");
   const buttonHoverBackground = useColorModeValue("blue.300", "blue.700");
   const buttonActiveBackground = useColorModeValue("blue.400", "blue.800");
-  const { address } = useAccount();
-  const { chain } = useNetwork();
-  const provider = useProvider();
+
   const [NFTsArray, setNFTsArray] = useState([] as NFT[]);
   const [userNFTsArray, setUserNFTsArray] = useState([] as NFT[]);
   const [selectedNFT, setSelectedNFT] = useState<NFT>();
@@ -49,26 +51,39 @@ export default function GatedPage() {
   const [showQuests, setShowQuests] = useState(false);
   const [filterNFTs, setFilterNFTs] = useState(false);
   const [muted, setMuted] = useState(false);
-  const DAOSCAPE = useContract({
+
+  const { address } = useAccount();
+  const { chain } = useNetwork();
+  const provider = useProvider();
+  const { data: signer } = useSigner();
+
+  const DAOSCAPE_READ = useContract({
     address: DAOSCAPE_DATA[chain?.id as keyof typeof DAOSCAPE_DATA] as string,
     abi: DAOSCAPE_DATA.abi,
     signerOrProvider: provider,
   });
+  const DAOSCAPE_WRITE = useContract({
+    address: DAOSCAPE_DATA[chain?.id as keyof typeof DAOSCAPE_DATA] as string,
+    abi: DAOSCAPE_DATA.abi,
+  });
 
   const addRecentTransaction = useAddRecentTransaction();
-  const { config: beginQuestConfig } = usePrepareContractWrite({
-    ...DAOSCAPE,
+  const {
+    config: beginQuestConfig,
+    status: beginQuestStatus,
+    isSuccess: beginQuestTx,
+  } = usePrepareContractWrite({
+    ...DAOSCAPE_WRITE,
     functionName: "beginQuest",
     args: [selectedNFT?.id],
     overrides: {
       gasPrice: 600000000000,
     },
-    enabled: false,
   } as UseContractConfig);
   const { data: beginQuestData, write: beginQuest } = useContractWrite(beginQuestConfig);
 
   const { config: endQuestConfig } = usePrepareContractWrite({
-    ...DAOSCAPE,
+    ...DAOSCAPE_READ,
     functionName: "endQuest",
     args: [],
     overrides: {
@@ -79,13 +94,12 @@ export default function GatedPage() {
   const { data: endQuestData, write: endQuest } = useContractWrite(endQuestConfig);
 
   const { data: totalSupplyData } = useContractRead({
-    address: DAOSCAPE_DATA[chain?.id as keyof typeof DAOSCAPE_DATA] as string,
-    abi: DAOSCAPE_DATA.abi,
+    ...DAOSCAPE_READ,
     functionName: "totalSupply",
   });
 
   const { data: userNFTBalance } = useContractRead({
-    ...DAOSCAPE,
+    ...DAOSCAPE_READ,
     functionName: "balanceOf",
     args: [address],
   });
@@ -97,8 +111,8 @@ export default function GatedPage() {
     let nftURI;
     async function getAndRenderNFTs() {
       for (let i = 1; i <= Number(totalSupplyData); i++) {
-        nftOwner = await DAOSCAPE?.ownerOf(i);
-        nftURI = await DAOSCAPE?.tokenURI(i);
+        nftOwner = await DAOSCAPE_READ?.ownerOf(i);
+        nftURI = await DAOSCAPE_READ?.tokenURI(i);
         tempNFTArray.push({ id: i, owner: nftOwner, uri: nftURI });
         //add user NFTS to UserNFTsArray
         if (nftOwner === address) {
@@ -108,8 +122,8 @@ export default function GatedPage() {
       setNFTsArray(tempNFTArray);
       setUserNFTsArray(tempUserNFTArray);
     }
-    DAOSCAPE && getAndRenderNFTs();
-  }, [DAOSCAPE]);
+    DAOSCAPE_READ && getAndRenderNFTs();
+  }, [DAOSCAPE_READ]);
 
   useEffect(() => {
     if (NFTsArray.length > 0) {
@@ -231,7 +245,7 @@ export default function GatedPage() {
   }
 
   return (
-    <>
+    <ContractContext.Provider value="hello from context">
       <Head>
         <title>DAOScape Game</title>
         <meta name="description" content="DAOScape Game" />
@@ -382,7 +396,9 @@ export default function GatedPage() {
             </SimpleGrid>
           </Flex>
 
-          <Flex
+          {showQuests && <QuestHall />}
+
+          {/* <Flex
             hidden={showQuests ? false : true}
             direction={"column"}
             width="100%"
@@ -415,10 +431,15 @@ export default function GatedPage() {
               spacing={10}
               background={formBackground}
             >
-              <Button onClick={() => beginQuest?.()}>Start Quest</Button>
+              <Button
+                disabled={beginQuestStatus === "success" ? false : true}
+                onClick={() => beginQuest?.()}
+              >
+                Start Quest
+              </Button>
               <Button onClick={() => endQuest?.()}>End Quest</Button>
             </SimpleGrid>
-          </Flex>
+          </Flex> */}
         </Flex>
       </Flex>
       <Flex justify={"space-between"} align="center">
@@ -433,7 +454,7 @@ export default function GatedPage() {
         </Button>
       </Flex>
       <Sound url="/osrs.mp3" playStatus={muted ? "PLAYING" : "PAUSED"} volume={muted ? 0 : 10} />
-    </>
+    </ContractContext.Provider>
   );
 }
 

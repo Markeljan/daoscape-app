@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { Flex, useColorModeValue, Image } from "@chakra-ui/react";
-import HomeGrid from "../components/HomeGrid";
-import ToggleTheme from "../components/ToggleTheme";
-import Navbar from "../components/Navbar";
+import HomeGrid from "../src/components/HomeGrid";
+import ToggleTheme from "../src/components/ToggleTheme";
+import Navbar from "../src/components/Navbar";
 
 const Home: NextPage = () => {
   const formBackground = useColorModeValue("gray.100", "gray.700");
