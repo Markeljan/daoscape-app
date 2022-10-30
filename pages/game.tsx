@@ -114,12 +114,16 @@ export default function GatedPage() {
   useEffect(() => {
     if (NFTsArray.length > 0) {
       setSelectedNFT(NFTsArray.find((nft) => nft.owner === address) as NFT);
-      setSelectedNFTEl(renderSelectedNFTEl() as any);
-
       setNFTEls(renderAllNFTs() as any);
       setUserNFTEls(renderUserNFTs() as any);
     }
   }, [NFTsArray]);
+
+  useEffect(() => {
+    if (selectedNFT) {
+      setSelectedNFTEl(renderSelectedNFTEl() as any);
+    }
+  }, [selectedNFT]);
 
   function renderAllNFTs() {
     if (NFTsArray.length < 1) {
@@ -201,9 +205,9 @@ export default function GatedPage() {
           <Button
             onClick={() =>
               setSelectedNFT(
-                userNFTsArray.findIndex((nft) => nft.id === selectedNFT!.id) === 0
+                userNFTsArray.findIndex((nft) => nft.id === selectedNFT.id) === 0
                   ? userNFTsArray[userNFTsArray.length - 1]
-                  : userNFTsArray[userNFTsArray.findIndex((nft) => nft.id === selectedNFT!.id) - 1]
+                  : userNFTsArray[userNFTsArray.findIndex((nft) => nft.id === selectedNFT.id) - 1]
               )
             }
           >
@@ -212,10 +216,10 @@ export default function GatedPage() {
           <Button
             onClick={() =>
               setSelectedNFT(
-                userNFTsArray.findIndex((nft) => nft.id === selectedNFT!.id) ===
+                userNFTsArray.findIndex((nft) => nft.id === selectedNFT.id) ===
                   userNFTsArray.length - 1
                   ? userNFTsArray[0]
-                  : userNFTsArray[userNFTsArray.findIndex((nft) => nft.id === selectedNFT!.id) + 1]
+                  : userNFTsArray[userNFTsArray.findIndex((nft) => nft.id === selectedNFT.id) + 1]
               )
             }
           >
