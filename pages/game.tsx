@@ -24,7 +24,7 @@ import Sound from "react-sound";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
 import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
-import { Contract, ContractInterface, ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 
 interface NFT {
   id: number;
@@ -52,12 +52,11 @@ export default function GatedPage() {
   const [muted, setMuted] = useState(false);
   const DAOSCAPE = useContract({
     address: DAOSCAPE_DATA[chain?.id as keyof typeof DAOSCAPE_DATA] as string,
-    abi: DAOSCAPE_DATA.abi as [],
+    abi: DAOSCAPE_DATA.abi,
+    signerOrProvider: provider,
   });
-  const [gameContract, setGameContract] = useState<Contract>();
 
   const addRecentTransaction = useAddRecentTransaction();
-
   const { config: beginQuestConfig } = usePrepareContractWrite({
     ...DAOSCAPE,
     functionName: "beginQuest",
@@ -81,7 +80,8 @@ export default function GatedPage() {
   const { data: endQuestData, write: endQuest } = useContractWrite(endQuestConfig);
 
   const { data: totalSupplyData } = useContractRead({
-    ...DAOSCAPE,
+    address: DAOSCAPE_DATA[chain?.id as keyof typeof DAOSCAPE_DATA] as string,
+    abi: DAOSCAPE_DATA.abi,
     functionName: "totalSupply",
   });
 
@@ -92,7 +92,9 @@ export default function GatedPage() {
   });
 
   useEffect(() => {
-    setGameContract(new ethers.Contract(DAOSCAPE!.address, DAOSCAPE_DATA.abi, provider));
+    (async () => {
+      console.log("totalSupply", Number(totalSupplyData));
+    })();
   }, [DAOSCAPE]);
 
   useEffect(() => {
@@ -100,37 +102,37 @@ export default function GatedPage() {
     let tempUserNFTArray = [] as NFT[];
     let nftOwner;
     let nftURI;
-    async function getNFTsArray() {
+    async function getAndRenderNFTs() {
       for (let i = 1; i <= Number(totalSupplyData); i++) {
-        nftOwner = await gameContract?.ownerOf(i);
-        nftURI = await gameContract?.tokenURI(i);
-        //add user NFTS to array
+        nftOwner = await DAOSCAPE?.ownerOf(i);
+        nftURI = await DAOSCAPE?.tokenURI(i);
         tempNFTArray.push({ id: i, owner: nftOwner, uri: nftURI });
-        if (nftOwner === address?.toLocaleLowerCase()) {
+        //add user NFTS to UserNFTsArray
+        if (nftOwner === address) {
           tempUserNFTArray.push({ id: i, owner: nftOwner, uri: nftURI });
         }
       }
-      //set NFT data and render NFT elements
       setNFTsArray(tempNFTArray);
-      setNFTEls(renderAllNFTs() as any);
       setUserNFTsArray(tempUserNFTArray);
-      setUserNFTEls(renderUserNFTs() as any);
-
-      setSelectedNFT(NFTsArray.find((nft) => nft.owner === address!.toLocaleLowerCase()) as NFT);
     }
-    gameContract && getNFTsArray();
-  }, [gameContract]);
+    DAOSCAPE && getAndRenderNFTs();
+  }, [DAOSCAPE]);
 
   useEffect(() => {
-    selectedNFT && setSelectedNFTEl(renderSelectedNFTEl() as any);
-  }, [selectedNFT]);
+    if (NFTsArray.length > 0) {
+      setSelectedNFT(NFTsArray.find((nft) => nft.owner === address) as NFT);
+      setSelectedNFTEl(renderSelectedNFTEl() as any);
+
+      setNFTEls(renderAllNFTs() as any);
+      setUserNFTEls(renderUserNFTs() as any);
+    }
+  }, [NFTsArray]);
 
   function renderAllNFTs() {
     if (NFTsArray.length < 1) {
       return;
     }
     return NFTsArray.map((nft) => {
-      console.log(nft);
       return (
         <Flex key={nft.id} direction="column" align="center" justify="center">
           <Image src={nft.uri} />
@@ -153,6 +155,9 @@ export default function GatedPage() {
   }
 
   function renderUserNFTs() {
+    if (userNFTsArray.length < 1) {
+      return;
+    }
     return NFTsArray.map((nft) => {
       if (nft.owner === address!.toLocaleLowerCase())
         return (
@@ -177,6 +182,9 @@ export default function GatedPage() {
   }
 
   function renderSelectedNFTEl() {
+    if (!selectedNFT) {
+      return;
+    }
     return (
       <Flex width={"200px"} direction="column">
         <Image src={selectedNFT!.uri} />
