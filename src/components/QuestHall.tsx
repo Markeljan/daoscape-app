@@ -1,10 +1,20 @@
 import { Flex, Button, Text, SimpleGrid } from "@chakra-ui/react";
 import { useContext } from "react";
-import { ContractContext } from "../contexts/ContractContext";
+import { GameContext } from "../contexts/GameContext";
+import { useColorModeValue } from "@chakra-ui/react";
 
 export default function QuestHall() {
-  const message = useContext(ContractContext);
-  console.log(message);
+  const {
+    setShowQuests,
+    showQuests,
+    buttonActiveBackground,
+    formBackground,
+    beginQuest,
+    signer,
+    endQuest,
+    selectedNFTEl,
+  } = useContext<any>(GameContext);
+
   return (
     <Flex
       direction={"column"}
@@ -34,12 +44,7 @@ export default function QuestHall() {
       <Text fontSize={"xl"}>Send your Scapers on quests to earn EXP, and DAOGold!</Text>
       <Text fontSize={"lg"}>(60 min lock period.)</Text>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={10} background={formBackground}>
-        <Button
-          disabled={beginQuestStatus === "success" ? false : true}
-          onClick={() => beginQuest?.()}
-        >
-          Start Quest
-        </Button>
+        <Button onClick={() => beginQuest?.()}>Start Quest</Button>
         <Button onClick={() => endQuest?.()}>End Quest</Button>
       </SimpleGrid>
     </Flex>

@@ -5,7 +5,7 @@ import { useAccount } from "wagmi";
 
 export default function Navbar() {
   const { push } = Router;
-  const { isConnected } = useAccount();
+  const { isDisconnected } = useAccount();
 
   const formBackground = useColorModeValue("gray.100", "gray.700");
   return (
@@ -20,7 +20,7 @@ export default function Navbar() {
       <Flex gap={["5px", "10px", "20px", "20px", "20px", "20px"]}>
         <Button onClick={() => push("/")}>Home</Button>
         <Button onClick={() => push("/mint")}>Mint</Button>
-        <Button disabled={isConnected ? false : true} onClick={() => push("/game")}>
+        <Button disabled={isDisconnected ? true : false} onClick={() => push("/game")}>
           Game
         </Button>
       </Flex>

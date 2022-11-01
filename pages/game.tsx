@@ -12,7 +12,7 @@ import {
   useProvider,
   useSigner,
 } from "wagmi";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BsArrowLeft,
   BsArrowRight,
@@ -26,8 +26,8 @@ import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
 import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 
-import { ContractContext } from "../src/contexts/ContractContext";
 import QuestHall from "../src/components/QuestHall";
+import { GameContext } from "../src/contexts/GameContext";
 
 interface NFT {
   id: number;
@@ -35,7 +35,7 @@ interface NFT {
   uri: string;
 }
 
-export default function GatedPage() {
+export default function Game() {
   const formBackground = useColorModeValue("gray.150", "gray.700");
   const buttonBackground = useColorModeValue("blue.200", "blue.600");
   const buttonHoverBackground = useColorModeValue("blue.300", "blue.700");
@@ -67,31 +67,26 @@ export default function GatedPage() {
     abi: DAOSCAPE_DATA.abi,
   });
 
-  const addRecentTransaction = useAddRecentTransaction();
-  const {
-    config: beginQuestConfig,
-    status: beginQuestStatus,
-    isSuccess: beginQuestTx,
-  } = usePrepareContractWrite({
-    ...DAOSCAPE_WRITE,
-    functionName: "beginQuest",
-    args: [selectedNFT?.id],
-    overrides: {
-      gasPrice: 600000000000,
-    },
-  } as UseContractConfig);
-  const { data: beginQuestData, write: beginQuest } = useContractWrite(beginQuestConfig);
+  const beginQuest = () => DAOSCAPE_WRITE?.beginQuest(selectedNFT?.id);
+  const endQuest = () => DAOSCAPE_WRITE?.endQuest(selectedNFT?.id);
 
-  const { config: endQuestConfig } = usePrepareContractWrite({
-    ...DAOSCAPE_READ,
-    functionName: "endQuest",
-    args: [],
-    overrides: {
-      gasPrice: 600000000000,
-    },
-    enabled: false,
-  } as UseContractConfig);
-  const { data: endQuestData, write: endQuest } = useContractWrite(endQuestConfig);
+  const gameData = {
+    DAOSCAPE_READ,
+    DAOSCAPE_WRITE,
+    address,
+    chain,
+    provider,
+    signer,
+    beginQuest,
+    endQuest,
+    showQuests,
+    setShowQuests,
+    buttonActiveBackground,
+    formBackground,
+    selectedNFTEl,
+  };
+
+  const addRecentTransaction = useAddRecentTransaction();
 
   const { data: totalSupplyData } = useContractRead({
     ...DAOSCAPE_READ,
@@ -119,6 +114,7 @@ export default function GatedPage() {
           tempUserNFTArray.push({ id: i, owner: nftOwner, uri: nftURI });
         }
       }
+
       setNFTsArray(tempNFTArray);
       setUserNFTsArray(tempUserNFTArray);
     }
@@ -245,7 +241,7 @@ export default function GatedPage() {
   }
 
   return (
-    <ContractContext.Provider value="hello from context">
+    <GameContext.Provider value={gameData as any}>
       <Head>
         <title>DAOScape Game</title>
         <meta name="description" content="DAOScape Game" />
@@ -431,12 +427,7 @@ export default function GatedPage() {
               spacing={10}
               background={formBackground}
             >
-              <Button
-                disabled={beginQuestStatus === "success" ? false : true}
-                onClick={() => beginQuest?.()}
-              >
-                Start Quest
-              </Button>
+              <Button onClick={() => beginQuest?.()}>Start Quest</Button>
               <Button onClick={() => endQuest?.()}>End Quest</Button>
             </SimpleGrid>
           </Flex> */}
@@ -454,7 +445,7 @@ export default function GatedPage() {
         </Button>
       </Flex>
       <Sound url="/osrs.mp3" playStatus={muted ? "PLAYING" : "PAUSED"} volume={muted ? 0 : 10} />
-    </ContractContext.Provider>
+    </GameContext.Provider>
   );
 }
 

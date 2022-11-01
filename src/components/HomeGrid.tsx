@@ -6,7 +6,7 @@ export default function HomeGrid({ formBackground, containerBackground }: any) {
   return (
     <SimpleGrid columns={[1, 1, 2, 2, 3, 4]} spacing={12}>
       <Flex
-        justifyContent={"center"}
+        justifyContent="center"
         direction="column"
         background={formBackground}
         p={12}

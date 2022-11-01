@@ -394,19 +394,6 @@ const DAOSCAPE_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "harmonyVRF",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "result",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1295,8 +1282,8 @@ export type Contract = { address: string; abi: any; chainId: number };
 export const DAOSCAPE_DATA = {
 	HarmonyTestnet: "0xF338b278954C4d39536E186532182d68F4A8CfCB",
 	1666700000: "0xF338b278954C4d39536E186532182d68F4A8CfCB",
-	TrustEvmTestnet: "0x9c429C7bEED44A9eb242cC0B69A2e5e1ADaC5DAF",
-	15555: "0x9c429C7bEED44A9eb242cC0B69A2e5e1ADaC5DAF",
+	TrustEvmTestnet: "0x4F8224c93226Bd5A62DD640b511f1cE0b537f69d",
+	15555: "0x4F8224c93226Bd5A62DD640b511f1cE0b537f69d",
 	
 	abi: DAOSCAPE_ABI,
 }
@@ -1304,8 +1291,8 @@ export const DAOSCAPE_DATA = {
 export const DSGOLD_DATA = {
 	HarmonyTestnet: "0xe2f03ab2806ac4d0c0222911a4e9b96771fb71d8",
 	1666700000: "0xe2f03ab2806ac4d0c0222911a4e9b96771fb71d8",
-	TrustEvmTestnet: "0x6C3C27Bbe1fa369bc52214d5783d727E36fbBA9F",
-	15555: "0x6C3C27Bbe1fa369bc52214d5783d727E36fbBA9F",
+	TrustEvmTestnet: "0xeA7ed108BFE6139E4d8D8F993ab7fcFFc3cA217D",
+	15555: "0xeA7ed108BFE6139E4d8D8F993ab7fcFFc3cA217D",
 
 	abi: DSGOLD_ABI,
 
