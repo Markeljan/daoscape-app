@@ -5,9 +5,7 @@ import { DAOSCAPE_DATA } from "../src/contracts";
 import {
   useAccount,
   useContractRead,
-  useContractWrite,
   useNetwork,
-  usePrepareContractWrite,
   useContract,
   useProvider,
   useSigner,
@@ -65,6 +63,7 @@ export default function Game() {
   const DAOSCAPE_WRITE = useContract({
     address: DAOSCAPE_DATA[chain?.id as keyof typeof DAOSCAPE_DATA] as string,
     abi: DAOSCAPE_DATA.abi,
+    signerOrProvider: signer,
   });
 
   const beginQuest = () => DAOSCAPE_WRITE?.beginQuest(selectedNFT?.id);
