@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.14;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -36,8 +36,9 @@ contract DAOScape is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
-        //randomize with harmony VRF
-        uint256 randomId = (uint256(harmonyVRF()) % 598) + 1;
+        //semi-random with block.difficulty
+        uint256 randomId = (uint256(block.difficulty + block.timestamp) % 598) +
+            1;
         string memory newURIEnd = string.concat(
             Strings.toString(randomId),
             ".png"
@@ -45,34 +46,42 @@ contract DAOScape is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
         _setTokenURI(tokenId, newURIEnd);
     }
 
-    function harmonyVRF() public view returns (bytes32 result) {
-        uint[1] memory bn;
-        bn[0] = block.number;
-        assembly {
-            let memPtr := mload(0x40)
-            if iszero(staticcall(not(0), 0xff, bn, 0x20, memPtr, 0x20)) {
-                invalid()
-            }
-            result := mload(memPtr)
-        }
-    }
-
     ////////////////////////////////////////////////////
     ////////////////////GAME LOGIC//////////////////////
     ////////////////////////////////////////////////////
+
+    enum Status {
+        IDLE,
+        QUESTING,
+        ARENA,
+        WIDLERNESS
+    }
+
+    struct Scaper {
+        uint256 tokenId;
+        uint256 arrayid;
+        address owner;
+        Status status;
+    }
+
+    mapping(uint256 => Scaper) public tokenIdToScaper;
+
+    Scaper[] ScapersArray;
+
     mapping(address => mapping(uint256 => uint256))
         public addressToTimelockToTokenId;
 
     function beginQuest(uint256 _tokenId) public {
+        tokenIdToScaper[_tokenId].status = Status.QUESTING;
         require(balanceOf(msg.sender) >= 1, "Can't Quest with your last NFT");
         safeTransferFrom(msg.sender, address(this), _tokenId);
         addressToTimelockToTokenId[msg.sender][_tokenId] = block.timestamp + 60;
     }
 
     function randomQuestReward() public view returns (uint256) {
-        //add logic based on stats
-        uint256 reward = ((uint256(harmonyVRF()) % 10) + 1) *
-            1000000000000000000;
+        //semi-random with block.difficulty
+        uint256 reward = ((uint256(block.difficulty + block.timestamp) % 10) +
+            1) * 1000000000000000000;
         return reward;
     }
 
