@@ -18,11 +18,7 @@ const Home: NextPage = () => {
 
       <Navbar />
 
-      <Flex direction="column" m={10}>
-        <Flex justifyContent="center" gap={20}></Flex>
-      </Flex>
-
-      <Flex direction={"column"} alignItems="center">
+      <Flex direction={"column"} alignItems="center" mt={20}>
         <HomeGrid formBackground={formBackground} />
       </Flex>
 
