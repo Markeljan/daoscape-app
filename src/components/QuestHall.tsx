@@ -17,6 +17,7 @@ export default function QuestHall() {
 
   return (
     <Flex
+      hidden={!showQuests}
       direction={"column"}
       width="100%"
       border="4px dotted gray"

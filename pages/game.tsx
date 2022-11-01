@@ -11,21 +11,15 @@ import {
   useSigner,
 } from "wagmi";
 import { useEffect, useState } from "react";
-import {
-  BsArrowLeft,
-  BsArrowRight,
-  BsFillVolumeUpFill,
-  BsToggleOff,
-  BsToggleOn,
-  BsVolumeMuteFill,
-} from "react-icons/bs";
+import { BsArrowLeft, BsArrowRight, BsFillVolumeUpFill, BsVolumeMuteFill } from "react-icons/bs";
 import Sound from "react-sound";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
-import { UseContractConfig } from "wagmi/dist/declarations/src/hooks/contracts/useContract";
 
 import QuestHall from "../src/components/QuestHall";
 import { GameContext } from "../src/contexts/GameContext";
+import Tavern from "../src/components/Tavern";
+import GameMap from "../src/components/GameMap";
 
 interface NFT {
   id: number;
@@ -80,9 +74,17 @@ export default function Game() {
     endQuest,
     showQuests,
     setShowQuests,
+    showTavern,
+    setShowTavern,
     buttonActiveBackground,
     formBackground,
     selectedNFTEl,
+    setFilterNFTs,
+    filterNFTs,
+    userNFTEls,
+    NFTEls,
+    buttonBackground,
+    buttonHoverBackground,
   };
 
   const addRecentTransaction = useAddRecentTransaction();
@@ -258,178 +260,9 @@ export default function Game() {
           borderRadius="2xl"
           gap={10}
         >
-          {/* Game Container */}
-          <Flex
-            hidden={showTavern || showQuests ? true : false}
-            direction={"column"}
-            position={"relative"}
-          >
-            <Image width="100%" src="/gameMap.jpg" />
-            <Flex
-              p={3}
-              m={1}
-              borderRadius="2xl"
-              background={useColorModeValue(buttonBackground, buttonBackground)}
-              position={"absolute"}
-            >
-              {selectedNFTEl}
-            </Flex>
-            <Link href="https://docs.daoscape.one/home/gameplay/combat" isExternal>
-              <Button
-                position={"absolute"}
-                fontSize={"20px"}
-                top="28%"
-                left="30%"
-                background={buttonBackground}
-                opacity="0.9"
-                _hover={{ background: buttonHoverBackground }}
-                _active={{ background: buttonActiveBackground }}
-                p="2, 4"
-                rounded="md"
-              >
-                Arena 🥊
-              </Button>
-            </Link>
-            <Button
-              onClick={() => setShowQuests(!showQuests)}
-              fontSize={"20px"}
-              position={"absolute"}
-              top="25%"
-              left="75%"
-              background={buttonBackground}
-              opacity="0.9"
-              _hover={{ background: buttonHoverBackground }}
-              _active={{ background: buttonActiveBackground }}
-              p="2, 4"
-              rounded="md"
-            >
-              Quest 💰
-            </Button>
-
-            <Link href="https://docs.daoscape.one/home/gameplay/training" isExternal>
-              <Button
-                fontSize={"20px"}
-                position={"absolute"}
-                top="80%"
-                left="40%"
-                background={buttonBackground}
-                opacity="0.9"
-                _hover={{ background: buttonHoverBackground }}
-                _active={{ background: buttonActiveBackground }}
-                p="2, 4"
-                rounded="md"
-              >
-                Training 🏋️‍♂️
-              </Button>
-            </Link>
-
-            <Button
-              onClick={() => setShowTavern(!showTavern)}
-              fontSize={"20px"}
-              position={"absolute"}
-              top="55%"
-              left="62%"
-              background={buttonBackground}
-              opacity="0.9"
-              _hover={{ background: buttonHoverBackground }}
-              _active={{ background: buttonActiveBackground }}
-              p="2, 4"
-              rounded="md"
-            >
-              Tavern 🍻
-            </Button>
-
-            <Link href="https://docs.daoscape.one/home/gameplay/combat" isExternal>
-              <Button
-                fontSize={"20px"}
-                position={"absolute"}
-                top="45%"
-                left="82%"
-                background={buttonBackground}
-                opacity="0.9"
-                _hover={{ background: buttonHoverBackground }}
-                _active={{ background: buttonActiveBackground }}
-                p="2, 4"
-                rounded="md"
-              >
-                Wilderness ☠
-              </Button>
-            </Link>
-          </Flex>
-
-          <Flex
-            hidden={showTavern ? false : true}
-            fontSize={"20px"}
-            direction={"column"}
-            width="100%"
-            border="4px dotted gray"
-            borderRadius="2xl"
-            justify={"center"}
-            align="center"
-            p={5}
-            pl={10}
-            pr={10}
-            gap={5}
-          >
-            <Button onClick={() => setShowTavern(!showTavern)} fontSize={"3xl"}>
-              Exit Tavern
-            </Button>
-            <Button
-              onClick={() => setFilterNFTs(!filterNFTs)}
-              leftIcon={filterNFTs ? <BsToggleOn size={"40px"} /> : <BsToggleOff size={"40px"} />}
-              fontSize={"xl"}
-            >
-              Filter Owned NFTs
-            </Button>
-
-            <SimpleGrid
-              columns={{ base: 2, md: 3, lg: 4 }}
-              spacing={"40px"}
-              background={formBackground}
-            >
-              {filterNFTs ? userNFTEls : NFTEls}
-            </SimpleGrid>
-          </Flex>
-
-          {showQuests && <QuestHall />}
-
-          {/* <Flex
-            hidden={showQuests ? false : true}
-            direction={"column"}
-            width="100%"
-            border="4px dotted gray"
-            borderRadius="2xl"
-            justify={"center"}
-            align="center"
-            p={5}
-            pl={10}
-            pr={10}
-            gap={4}
-          >
-            <Flex>
-              <Button onClick={() => setShowQuests(!showQuests)} fontSize={"3xl"}>
-                Exit Quests
-              </Button>
-            </Flex>
-            <Flex
-              p={3}
-              borderRadius="2xl"
-              background={useColorModeValue(buttonActiveBackground, buttonActiveBackground)}
-            >
-              {selectedNFTEl}
-            </Flex>
-
-            <Text fontSize={"xl"}>Send your Scapers on quests to earn EXP, and DAOGold!</Text>
-            <Text fontSize={"lg"}>(60 min lock period.)</Text>
-            <SimpleGrid
-              columns={{ base: 1, md: 2, lg: 2 }}
-              spacing={10}
-              background={formBackground}
-            >
-              <Button onClick={() => beginQuest?.()}>Start Quest</Button>
-              <Button onClick={() => endQuest?.()}>End Quest</Button>
-            </SimpleGrid>
-          </Flex> */}
+          <GameMap />
+          <Tavern />
+          <QuestHall />
         </Flex>
       </Flex>
       <Flex justify={"space-between"} align="center">
