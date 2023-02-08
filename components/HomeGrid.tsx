@@ -91,7 +91,7 @@ export default function HomeGrid({ formBackground, containerBackground }: any) {
           Explore the open-source repo.
         </Text>
         <Flex direction={"column"} height={"100%"} justifyContent={"center"}>
-          <Link href="https://github.com/Markeljan/daoscape" target="_blank">
+          <Link href="https://github.com/Markeljan/daoscape-app" target="_blank">
             <Button colorScheme="teal" width={"100%"}>
               <SiGithub size={25} />
             </Button>
